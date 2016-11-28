@@ -23,11 +23,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-    }
-
-    public void onResume() {
-        super.onResume();
-
         try {
             AsyncTask task =new OkHttpRequests().execute();
             List<OkHttpRequests.MainActivityLists> lists = (List<OkHttpRequests.MainActivityLists>) task.get();
@@ -55,6 +50,10 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(e.toString());
         }
 
+    }
+
+    public void onResume() {
+        super.onResume();
 
 
     }
