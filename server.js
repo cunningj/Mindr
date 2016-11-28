@@ -43,10 +43,23 @@ app.get('/api/getListItems',(req, res) => {
   })
 })
 
-connection.query('SELECT * FROM remindr.list_items',function(err,rows){
+app.get('/api/listPrefs', (req, res) => {connection.query('SELECT listName FROM remindr.list_prefs',function(err,rows){
   if(err) throw err;
-  console.log('Data received from Db:\n');
-  console.log(rows);
+  
+  const listNames = rows.map(row => {
+    const names = []
+    for (var key in row) {
+      if (key === 'listName') {
+        names.push(row[key])
+      }
+    }
+    return {
+      names: names
+    }
+  })
+  res.end(JSON.stringify(listNames))
+
+  })
 })
 
 app.listen(3000)
