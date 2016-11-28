@@ -1,9 +1,12 @@
 package com.example.ownerperson.mindr;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -14,7 +17,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static final String baseURL = "http://10.0.2.2:3000/";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,16 @@ public class MainActivity extends AppCompatActivity {
                     listButton.setLayoutParams(new Toolbar.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT));
+                    final AppCompatActivity self = this;
+                    listButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            startActivity(new Intent(self, ViewListItems.class));
+                        }
+
+                    });
+
                     buttons.addView(listButton);
+
                 }
             }
         } catch(Exception e){
