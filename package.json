@@ -1,0 +1,23 @@
+{
+  "name": "mindr",
+  "version": "1.0.0",
+  "description": "Don't leave home without it. Don't come home without it.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smai-f/Mindr.git"
+  },
+  "author": "Stephanie Ralls, Jacob Cunningham, Smai Fullerton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/smai-f/Mindr/issues"
+  },
+  "homepage": "https://github.com/smai-f/Mindr#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "mysql": "^2.12.0"
+  }
+}
