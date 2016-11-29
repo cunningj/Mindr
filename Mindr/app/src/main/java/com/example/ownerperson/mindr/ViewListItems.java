@@ -24,7 +24,7 @@ public class ViewListItems extends AppCompatActivity {
         String name = extras.getString("listName");
 
         TextView title = (TextView) findViewById(R.id.list_title);
-        title.setText(name);
+        title.setText(name + " List");
 
 
         try {

@@ -13,12 +13,17 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/list_title" />
+        android:id="@+id/list_title"
+        android:textSize="20dp"
+        android:textColor="#000"
+        />
+
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/list_item_names"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="16dp"
+        android:paddingTop="40dp"
         android:paddingRight="16dp"
         android:orientation="vertical" >
     </LinearLayout>
