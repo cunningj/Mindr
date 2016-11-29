@@ -28,7 +28,7 @@ public class ViewListItems extends AppCompatActivity {
 
 
         try {
-            AsyncTask task =new GetListItemsRequest().execute();
+            AsyncTask task =new GetListItemsRequest().execute(name);
             List<GetListItemsRequest.ItemLists> items = (List<GetListItemsRequest.ItemLists>) task.get();
             LinearLayout buttons = (LinearLayout) findViewById(R.id.list_item_names);
             for (GetListItemsRequest.ItemLists itemList : items) {
