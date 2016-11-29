@@ -1,5 +1,6 @@
 package com.example.ownerperson.mindr;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    Context context;
+
     public static final String baseURL = "http://10.0.2.2:3000/";
 
     @Override
@@ -21,12 +24,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        context = this;
+
         try {
-            AsyncTask task =new GetListNameRequest().execute();
+            AsyncTask task = new GetListNameRequest().execute();
             List<GetListNameRequest.MainActivityLists> lists = (List<GetListNameRequest.MainActivityLists>) task.get();
             LinearLayout buttons = (LinearLayout) findViewById(R.id.list_buttons);
             for (GetListNameRequest.MainActivityLists listName : lists) {
-                for(String name : listName.names){
+                for (String name : listName.names) {
                     Button listButton = new Button(this);
                     listButton.setText(name);
                     listButton.setLayoutParams(new Toolbar.LayoutParams(
@@ -48,11 +53,17 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e.toString());
         }
 
     }
+
+
+    public void goToMapClick(View view) {
+        startActivity(new Intent(context, MapsActivity.class));
+    }
+
 
     public void onResume() {
         super.onResume();
