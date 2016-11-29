@@ -34,10 +34,14 @@ public class MainActivity extends AppCompatActivity {
                     listButton.setLayoutParams(new Toolbar.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT));
+                    final String buttonName = name;
                     final AppCompatActivity self = this;
                     listButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
-                            startActivity(new Intent(self, ViewListItems.class));
+
+                            Intent viewListItems = new Intent(self, ViewListItems.class);
+                            viewListItems.putExtra("listName", buttonName);
+                            startActivity(viewListItems);
                         }
 
                     });
