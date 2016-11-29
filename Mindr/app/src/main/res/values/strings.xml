@@ -2,4 +2,17 @@
     <string name="app_name">Mindr</string>
     <string name="title_activity_maps">Map</string>
 
+    <string-array name="alert_ranges">
+        <item>.1 mi</item>
+        <item>.25 mi</item>
+        <item>.5 mi</item>
+        <item>.75 mi</item>
+        <item>1 mi</item>
+    </string-array>
+
+    <string-array name="location_list">
+        <item>Costco</item>
+        <item>Home</item>
+    </string-array>
+
 </resources>

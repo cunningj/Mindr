@@ -25,8 +25,17 @@
             android:id="@+id/map_page"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Go to Map"
+            android:text="Add New Location"
             android:onClick="goToMapClick"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/add_list_page"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Add New List"
+            android:onClick="addListClick"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 

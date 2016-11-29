@@ -27,17 +27,16 @@ public class MainActivity extends AppCompatActivity {
         context = this;
 
         try {
-            AsyncTask task = new GetListNameRequest().execute();
-            List<GetListNameRequest.MainActivityLists> lists = (List<GetListNameRequest.MainActivityLists>) task.get();
+            AsyncTask task = new HttpGetStringList().execute(MainActivity.baseURL + "api/listPrefs");
+            List<String> activities = (List<String>) task.get();
             LinearLayout buttons = (LinearLayout) findViewById(R.id.list_buttons);
-            for (GetListNameRequest.MainActivityLists listName : lists) {
-                for (String name : listName.names) {
+            for (String activity : activities) {
                     Button listButton = new Button(this);
-                    listButton.setText(name);
+                    listButton.setText(activity);
                     listButton.setLayoutParams(new Toolbar.LayoutParams(
                             ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT));
-                    final String buttonName = name;
+                    final String buttonName = activity;
                     final AppCompatActivity self = this;
                     listButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
@@ -50,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                     buttons.addView(listButton);
-
-                }
             }
         } catch (Exception e) {
             System.out.println(e.toString());
@@ -62,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToMapClick(View view) {
         startActivity(new Intent(context, MapsActivity.class));
+    }
+
+    public void addListClick(View view) {
+        startActivity(new Intent(context, AddListActivity.class));
     }
 
 
