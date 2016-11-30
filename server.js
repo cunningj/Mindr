@@ -41,28 +41,17 @@ app.get('/api/listPrefs', (req, res) => {
 
 
 app.post('/api/listItems', (req, res) => {
-console.log(req);
-        connection.query(
-        `SELECT i.item FROM remindr.list_items as i, remindr.list_prefs as p where p.listName ="${req.body.listName}" and i.listID=p.listID`, 
-         function(err,rows) {
-          if(err) throw err;
-  
-          const listItems = rows.map(row => {
-          const items = []
-          for (var key in row) {
-            if (key === 'item') {
-              items.push(row[key])
-            }
-          }
-          return {
-            items: items
-          }
-        })
-          console.log("THIS IS LIST ITEMS " + listItems);
-        res.end(JSON.stringify(listItems))
+  console.log("hi")
+  connection.query(
+  `SELECT i.item FROM remindr.list_items as i, remindr.list_prefs as p where p.listName ="${req.body.listName}" and i.listID=p.listID`,
+   function(err,rows) {
+    if(err) throw err;
+    res.json(rows.map(row => row.item))
 
-        })
+  })
 })
+
+
 
 
 

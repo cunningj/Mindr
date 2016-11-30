@@ -29,20 +29,19 @@ public class ViewListItems extends AppCompatActivity {
 
         try {
             AsyncTask task =new GetListItemsRequest().execute(name);
-            List<GetListItemsRequest.ItemLists> items = (List<GetListItemsRequest.ItemLists>) task.get();
+            List<String> items = (List<String>) task.get();
             LinearLayout buttons = (LinearLayout) findViewById(R.id.list_item_names);
-            for (GetListItemsRequest.ItemLists itemList : items) {
-                for(String item : itemList.items){
-                    Button listButton = new Button(this);
-                    listButton.setText(item);
-                    listButton.setLayoutParams(new Toolbar.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            for(String item : items){
+                Button listButton = new Button(this);
+                listButton.setText(item);
+                listButton.setLayoutParams(new Toolbar.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
 
 
-                    buttons.addView(listButton);
+                buttons.addView(listButton);
 
-                }
             }
         } catch(Exception e){
             System.out.println(e.toString());

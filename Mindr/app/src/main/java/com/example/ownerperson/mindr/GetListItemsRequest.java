@@ -20,22 +20,18 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 
-public class GetListItemsRequest extends AsyncTask<String,Void, List<GetListItemsRequest.ItemLists>> {
+public class GetListItemsRequest extends AsyncTask<String,Void, List<String>> {
 
     private static final String LIST_ITEMS_ENDPOINT = MainActivity.baseURL + "api/listItems";
 
     private static final Moshi MOSHI = new Moshi.Builder().build();
-    private static final JsonAdapter<List<ItemLists>> VIEW_LIST_ITEMS_JSON_ADAPTER = MOSHI.adapter(
-            Types.newParameterizedType(List.class, ItemLists.class));
+    private static final JsonAdapter<List<String>> VIEW_LIST_ITEMS_JSON_ADAPTER = MOSHI.adapter(
+            Types.newParameterizedType(List.class, String.class));
 
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
-    static class ItemLists {
-        List<String> items;
-    }
-
-    protected List<ItemLists> doInBackground(String... args) {
+    protected List<String> doInBackground(String... args) {
         Map<String, String> reqData = new HashMap<String, String>();
         reqData.put("listName", args[0]);
         JSONObject reqJson = new JSONObject(reqData);
@@ -54,7 +50,7 @@ public class GetListItemsRequest extends AsyncTask<String,Void, List<GetListItem
 
             // Deserialize HTTP response to concrete type.
             ResponseBody respBody = response.body();
-            List<ItemLists> itemLists = VIEW_LIST_ITEMS_JSON_ADAPTER.fromJson(respBody.source());
+            List<String> itemLists = VIEW_LIST_ITEMS_JSON_ADAPTER.fromJson(respBody.source());
             respBody.close();
             return itemLists;
         } catch (Exception e){
