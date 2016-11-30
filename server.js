@@ -53,11 +53,12 @@ app.post('/api/listItems', (req, res) => {
 
 app.post('/api/addList', (req, res) => {
   console.log("adding new list")
+  console.log(req.body)
   connection.query(
-  `INSERT INTO remindr.list_prefs (listName, approaching, alertRange) VALUES (${req.body.listName},${req.body.approaching},${req.body.alertRange})`,
+  `INSERT INTO remindr.list_prefs (listName, approaching, alertRange, locationName) VALUES ("${req.body.listName}","${req.body.approaching}","${req.body.alertRange}","${req.body.locationName}")`,
    function(err,rows) {
     if(err) throw err;
-    res.json(rows.map(row => row.item))
+    res.json(["success"])
 
   })
 })
