@@ -50,6 +50,7 @@ public class PostListRequest extends AsyncTask<String, Void, List<String>> {
                 .post(body)
                 .build();
         try {
+            Response response = client.newCall(request).execute();
             System.out.println("boo yaaaaaa");
 
         } catch (Exception e){
