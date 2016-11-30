@@ -65,7 +65,7 @@ public class AddListActivity extends AppCompatActivity {
 
         listName = (EditText) findViewById(R.id.list_name);
         String name = listName.getText().toString();
-
+        context = this;
 
 
         try {
