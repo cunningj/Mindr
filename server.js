@@ -25,7 +25,7 @@ connection.connect(function(err) {
 //when list is opened request should send list id and querey based on that
 //select where list Id is req.listID
 app.get('/api/locations',(req, res) => {
-  connection.query('SELECT locationName FROM remindr.locations', function(err, rows){
+  connection.query('SELECT locationName FROM remindr.list_prefs WHERE locationName IS NOT NULL', function(err, rows){
   if(err) throw err;
   res.json(rows.map(row => row.locationName))
 
@@ -33,7 +33,7 @@ app.get('/api/locations',(req, res) => {
 })
 
 app.get('/api/listPrefs', (req, res) => {
-  connection.query('SELECT listName FROM remindr.list_prefs',function(err,rows){
+  connection.query('SELECT listName FROM remindr.list_prefs WHERE listName IS NOT NULL',function(err,rows){
     if(err) throw err;
     res.json(rows.map(row => row.listName))
   })
@@ -51,8 +51,22 @@ app.post('/api/listItems', (req, res) => {
   })
 })
 
+app.post('/api/addList', (req, res) => {
+  console.log("adding new list")
+  connection.query(
+  `INSERT INTO remindr.list_prefs (listName, approaching, alertRange) VALUES (${req.body.listName},${req.body.approaching},${req.body.alertRange})`,
+   function(err,rows) {
+    if(err) throw err;
+    res.json(rows.map(row => row.item))
 
+  })
+})
 
+//insert into list_prefs
+//we get a new id for the list
+//select for the listID for the new list
+//insert new listID with the new list items
+//same query but for locations table
 
 
 app.listen(3000)
