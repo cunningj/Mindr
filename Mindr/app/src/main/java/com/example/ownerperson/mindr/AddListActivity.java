@@ -5,11 +5,15 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,10 +38,12 @@ public class AddListActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, locations);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationSpinner.setAdapter(adapter);
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-//                R.array.alert_ranges, android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinner.setAdapter(adapter);
+
+        Spinner alertRangeSpinner = (Spinner) findViewById(R.id.alert_spinner);
+        ArrayAdapter<CharSequence> alert_adapter = ArrayAdapter.createFromResource(this,
+                R.array.alert_ranges, android.R.layout.simple_spinner_item);
+        alert_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        alertRangeSpinner.setAdapter(alert_adapter);
 
     }
 
@@ -48,5 +54,30 @@ public class AddListActivity extends AppCompatActivity {
         itemTextBoxes.addView(textBox);
     }
 
+    EditText listName;
+    Switch approaching;
+    Spinner alertRange;
+    Spinner locationName;
+    EditText item;
+    Context context;
+
+    public void submitListClick(View view) {
+
+        listName = (EditText) findViewById(R.id.list_name);
+        String name = listName.getText().toString();
+
+
+
+        try {
+            AsyncTask task = new PostListRequest().execute(name);
+            task.get();
+
+        } catch(Exception e){
+            System.out.println(e.toString());
+        }
+
+        startActivity(new Intent(context, MainActivity.class));
+
+    }
 
 }

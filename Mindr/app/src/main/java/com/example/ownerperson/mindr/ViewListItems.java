@@ -38,8 +38,6 @@ public class ViewListItems extends AppCompatActivity {
                 listButton.setLayoutParams(new Toolbar.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
-
-
                 buttons.addView(listButton);
 
             }

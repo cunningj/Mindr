@@ -74,7 +74,7 @@
             android:onClick="addListItem"/>
 
         <Button
-            android:id="@+id/listPref"
+            android:id="@+id/submitListButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#ffffff"
