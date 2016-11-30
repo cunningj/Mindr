@@ -36,9 +36,9 @@ public class PostListRequest extends AsyncTask<String, Void, List<String>> {
     protected List<String> doInBackground(String... args) {
         Map<String, String> reqData = new HashMap<String, String>();
         reqData.put("listName", args[0]);
-        reqData.put("locationName", "VFW");
-        reqData.put("approaching", "1");
-        reqData.put("alertRange", "1");
+        reqData.put("locationName", args[1]);
+        reqData.put("approaching", args[2]);
+        reqData.put("alertRange", args[3]);
 
         JSONObject reqJson = new JSONObject(reqData);
         System.out.println("JSON!!!: "+ reqJson.toString());
@@ -52,6 +52,9 @@ public class PostListRequest extends AsyncTask<String, Void, List<String>> {
         try {
             Response response = client.newCall(request).execute();
             System.out.println("boo yaaaaaa");
+
+            ResponseBody respBody = response.body();
+            respBody.close();
 
         } catch (Exception e){
             System.out.println("Could not make http request : " + e.toString());

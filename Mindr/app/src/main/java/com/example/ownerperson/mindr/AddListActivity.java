@@ -63,13 +63,28 @@ public class AddListActivity extends AppCompatActivity {
 
     public void submitListClick(View view) {
 
+        String approachingNum;
         listName = (EditText) findViewById(R.id.list_name);
-        String name = listName.getText().toString();
+        locationName = (Spinner) findViewById(R.id.location_spinner);
+        approaching = (Switch) findViewById(R.id.approaching);
+        alertRange = (Spinner) findViewById(R.id.alert_spinner);
+
+        System.out.println("This is approaching " + approaching);
+        if(approaching != null){
+            //Approaching is true, switch turned on, default
+             approachingNum = "1";
+        } else {
+             approachingNum = "0";
+        }
+
+        String listNameText = listName.getText().toString();
+        String locationNameText = locationName.getSelectedItem().toString();
+        String alertRangeText = alertRange.getSelectedItem().toString();
         context = this;
 
 
         try {
-            AsyncTask task = new PostListRequest().execute(name);
+            AsyncTask task = new PostListRequest().execute(listNameText, locationNameText, approachingNum, alertRangeText);
             task.get();
 
         } catch(Exception e){

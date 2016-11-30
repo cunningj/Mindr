@@ -3,11 +3,11 @@
     <string name="title_activity_maps">Map</string>
 
     <string-array name="alert_ranges">
-        <item>.1 mi</item>
-        <item>.25 mi</item>
-        <item>.5 mi</item>
-        <item>.75 mi</item>
-        <item>1 mi</item>
+        <item>.1</item>
+        <item>.25</item>
+        <item>.5</item>
+        <item>.75</item>
+        <item>1</item>
     </string-array>
 
 </resources>
