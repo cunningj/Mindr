@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void goToMapClick(View view) {
-        startActivity(new Intent(context, MapsActivity.class));
+    public void addLocationClick(View view) {
+        startActivity(new Intent(context, AddLocationActivity.class));
     }
 
     public void addListClick(View view) {
