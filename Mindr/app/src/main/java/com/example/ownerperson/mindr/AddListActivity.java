@@ -15,7 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -47,19 +49,38 @@ public class AddListActivity extends AppCompatActivity {
 
     }
 
+    List<String> items = new ArrayList<String>();
+
+    EditText previousItem;
+
+
     public void addListItem(View view){
+        System.out.println("hi");
         LinearLayout itemTextBoxes = (LinearLayout) findViewById(R.id.add_list_layout);
+
+
+        previousItem = (EditText) findViewById(R.id.list_item);
+
+        System.out.println(previousItem);
+
+        System.out.println(previousItem.getText().toString());
+
+        items.add(previousItem.getText().toString());
+
+        System.out.println(items);
+
         EditText textBox = new EditText(this);
         textBox.setHint("Enter item here");
         itemTextBoxes.addView(textBox);
+
     }
 
     EditText listName;
     Switch approaching;
     Spinner alertRange;
     Spinner locationName;
-    EditText item;
     Context context;
+    EditText lastItem;
 
     public void submitListClick(View view) {
 
@@ -68,8 +89,11 @@ public class AddListActivity extends AppCompatActivity {
         locationName = (Spinner) findViewById(R.id.location_spinner);
         approaching = (Switch) findViewById(R.id.approaching);
         alertRange = (Spinner) findViewById(R.id.alert_spinner);
+        lastItem = (EditText) findViewById(R.id.list_item);
 
-        System.out.println("This is approaching " + approaching);
+      /////fix this getSelectedItem not working:  approaching = approaching.getSelectedItem().toString();
+
+
         if(approaching != null){
             //Approaching is true, switch turned on, default
              approachingNum = "1";
@@ -80,11 +104,18 @@ public class AddListActivity extends AppCompatActivity {
         String listNameText = listName.getText().toString();
         String locationNameText = locationName.getSelectedItem().toString();
         String alertRangeText = alertRange.getSelectedItem().toString();
+
+        items.add(lastItem.getText().toString());
+
         context = this;
+        //(String[])items.toArray();
+        String[] baseParams = {listNameText, locationNameText, approachingNum, alertRangeText};
+        List<String> params = Arrays.asList(baseParams);
+        params.addAll(items);
 
-
+        System.out.println(params);
         try {
-            AsyncTask task = new PostListRequest().execute(listNameText, locationNameText, approachingNum, alertRangeText);
+            AsyncTask task = new PostListRequest().execute((String[])params.toArray());
             task.get();
 
         } catch(Exception e){
