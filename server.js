@@ -55,10 +55,31 @@ app.post('/api/listItems', (req, res) => {
 app.post('/api/addList', (req, res) => {
   console.log("adding new list")
   console.log(req.body)
+  var re = /item*/;
+  var itemsArr = [];
+  for(key in req.body){
+    if (key.match(re) && req.body[key]){
+      var newArr = [];
+      newArr.push(req.body[key]);
+      itemsArr.push(newArr);
+    }
+  }
+
+ 
+
+  var sql =  "";
+  for (var i = 0; i<itemsArr.length; i++) {
+    sql = sql + "INSERT INTO remindr.list_items (listID, item) VALUES (LAST_INSERT_ID(), '" + itemsArr[i] + "'); \n" 
+
+  }
+
+  console.log(sql);
+
+  console.log("This is itemsArray" + itemsArr);
   connection.query(
   `INSERT INTO remindr.list_prefs (listName, approaching, alertRange, locationName) VALUES ("${req.body.listName}","${req.body.approaching}","${req.body.alertRange}","${req.body.locationName}");
   SELECT LAST_INSERT_ID();
-  INSERT INTO remindr.list_items (listID, item) VALUES (LAST_INSERT_ID(), "${req.body.item}" )`,
+  ${sql}`,
 
    function(err,rows) {
     if(err) throw err;

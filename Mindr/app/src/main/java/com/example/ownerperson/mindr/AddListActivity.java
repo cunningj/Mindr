@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -53,26 +54,29 @@ public class AddListActivity extends AppCompatActivity {
     List<String> items = new ArrayList<String>();
 
     EditText previousItem;
+    String previousText;
+    TextView newTextView;
 
 
     public void addListItem(View view){
-        System.out.println("hi");
         LinearLayout itemTextBoxes = (LinearLayout) findViewById(R.id.add_list_layout);
-
-
         previousItem = (EditText) findViewById(R.id.list_item);
+        System.out.println("This is previous item " + previousItem);
+        previousText = previousItem.getText().toString();
+        System.out.println("This is previous text " + previousText);
 
-        System.out.println(previousItem);
+        if(!previousText.equals("")){
+            items.add(previousText);
+        }
 
-        System.out.println(previousItem.getText().toString());
-
-        items.add(previousItem.getText().toString());
-
-        System.out.println(items);
-
-        EditText textBox = new EditText(this);
-        textBox.setHint("Enter item here");
+        TextView textBox = new TextView(this);
+        textBox.setText(previousText);
         itemTextBoxes.addView(textBox);
+        previousItem.setText("");
+
+        System.out.println("This is items " + items);
+
+
 
     }
 

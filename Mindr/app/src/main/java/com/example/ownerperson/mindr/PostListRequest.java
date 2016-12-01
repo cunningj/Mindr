@@ -39,7 +39,12 @@ public class PostListRequest extends AsyncTask<String, Void, List<String>> {
         reqData.put("locationName", args[1]);
         reqData.put("approaching", args[2]);
         reqData.put("alertRange", args[3]);
-        reqData.put("item", args[4]);
+        int arraySize = args.length;
+
+        for (int i = 4; i < arraySize; i++) {
+            reqData.put("item" + i, args[i]);
+        }
+
 
         JSONObject reqJson = new JSONObject(reqData);
         System.out.println("JSON!!!: "+ reqJson.toString());

@@ -44,11 +44,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"/>
 
+            <TextView
+            android:id="@+id/new_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
             <EditText
-                android:id="@+id/list_item"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter item here"/>
+            android:id="@+id/list_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter item here"/>
 
     </LinearLayout>
 
