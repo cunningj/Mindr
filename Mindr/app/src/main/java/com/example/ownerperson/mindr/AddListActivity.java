@@ -18,6 +18,7 @@ import android.widget.Switch;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -91,15 +92,18 @@ public class AddListActivity extends AppCompatActivity {
         alertRange = (Spinner) findViewById(R.id.alert_spinner);
         lastItem = (EditText) findViewById(R.id.list_item);
 
-      /////fix this getSelectedItem not working:  approaching = approaching.getSelectedItem().toString();
+
+        //approaching = approaching.getSelectedItem().toString();
 
 
-        if(approaching != null){
+        if(approaching.isChecked()){
             //Approaching is true, switch turned on, default
              approachingNum = "1";
         } else {
              approachingNum = "0";
         }
+
+        System.out.println(approachingNum);
 
         String listNameText = listName.getText().toString();
         String locationNameText = locationName.getSelectedItem().toString();
@@ -107,19 +111,23 @@ public class AddListActivity extends AppCompatActivity {
 
         items.add(lastItem.getText().toString());
 
+        System.out.println("here are items " + items);
+
         context = this;
-        //(String[])items.toArray();
+
         String[] baseParams = {listNameText, locationNameText, approachingNum, alertRangeText};
-        List<String> params = Arrays.asList(baseParams);
+        System.out.println("here are baseparams " + baseParams);
+        List<String> params = new LinkedList<String>(Arrays.asList(baseParams));
         params.addAll(items);
 
-        System.out.println(params);
+        System.out.println("here are params " + params);
         try {
-            AsyncTask task = new PostListRequest().execute((String[])params.toArray());
+            AsyncTask task = new PostListRequest().execute((String[])params.toArray(new String[params.size()]));
             task.get();
 
         } catch(Exception e){
             System.out.println(e.toString());
+            e.printStackTrace();
         }
 
         startActivity(new Intent(context, MainActivity.class));

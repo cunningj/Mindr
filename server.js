@@ -4,7 +4,8 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
-  password : 'basset'
+  password : 'basset',
+  multipleStatements: true
 });
 
 var bodyParser = require('body-parser')
@@ -55,7 +56,10 @@ app.post('/api/addList', (req, res) => {
   console.log("adding new list")
   console.log(req.body)
   connection.query(
-  `INSERT INTO remindr.list_prefs (listName, approaching, alertRange, locationName) VALUES ("${req.body.listName}","${req.body.approaching}","${req.body.alertRange}","${req.body.locationName}")`,
+  `INSERT INTO remindr.list_prefs (listName, approaching, alertRange, locationName) VALUES ("${req.body.listName}","${req.body.approaching}","${req.body.alertRange}","${req.body.locationName}");
+  SELECT LAST_INSERT_ID();
+  INSERT INTO remindr.list_items (listID, item) VALUES (LAST_INSERT_ID(), "${req.body.item}" )`,
+
    function(err,rows) {
     if(err) throw err;
     res.json(["success"])
