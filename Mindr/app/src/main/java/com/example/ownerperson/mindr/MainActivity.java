@@ -67,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(context, AddListActivity.class));
     }
 
+    public void lookAtMapClick(View view) {
+        startActivity(new Intent(context, MapsActivity.class));
+    }
+
 
     public void onResume() {
         super.onResume();
