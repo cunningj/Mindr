@@ -21,14 +21,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     public String coord;
 
+    private double lat;
+    private double lng;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        //get latitude
         Bundle extras = getIntent().getExtras();
         coord = extras.getString("coordinates");
+        String latString = coord.substring(coord.indexOf("(") + 1,coord.indexOf(","));
+        System.out.println("THIS IS LAT " + latString);
+        lat = Double.parseDouble(latString);
+        System.out.println("THIS IS LAT DOUBLE " + lat);
+
+        //get longitude
+        String lngString = coord.substring(coord.indexOf(",") + 1,coord.indexOf(")"));
+        System.out.println("THIS IS LONG " + lngString);
+        lng = Double.parseDouble(lngString);
+        System.out.println("THIS IS LAT DOUBLE " + lng);
 
         System.out.println("these are coordinates " + coord);
 
@@ -45,12 +59,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         LatLng missoula = new LatLng(46.8787, -113.9966);
 
-        //LatLng GFS = new LatLng(coord);
+        LatLng GFS = new LatLng(lat, lng);
 
         mMap.addMarker(new MarkerOptions()
                 .position(missoula)
                 .title("Home Sweet Home"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(missoula));
+
+        mMap.addMarker(new MarkerOptions()
+                .position(GFS)
+                .title("Good Food Store"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(GFS));
     }
 
 
