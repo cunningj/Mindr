@@ -1,6 +1,8 @@
 package com.example.ownerperson.mindr;
 
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +12,18 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class AddLocationActivity extends AppCompatActivity {
 
     //Figure out what Tag is? Randomly added to pacify red squiggly line overlords
     private static final String TAG = "AddLocationActivity";
-
+    private GoogleMap mMap;
     final AppCompatActivity self = this;
 
 
@@ -27,6 +35,20 @@ public class AddLocationActivity extends AppCompatActivity {
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
+        FragmentManager fmanager = getSupportFragmentManager();
+        Fragment fragment = fmanager.findFragmentById(R.id.map);
+        SupportMapFragment supportmapfragment = (SupportMapFragment)fragment;
+        supportmapfragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                //System.out.println("onMapReady callback");
+                mMap = googleMap;
+                // Add current location marker here
+
+            }
+        });
+
+
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
@@ -34,11 +56,18 @@ public class AddLocationActivity extends AppCompatActivity {
                 Log.i(TAG, "Lat/log " + place.getLatLng());
                 Log.i(TAG, "ID " + place.getId());
 
-//                Intent goToMap = new Intent(self, MapsActivity.class);
-//                //this is working to send over the latlng screen to map activity, need to know how to get information
-//                // in a format that we can use to addmarker with latlng
-//                goToMap.putExtra("coordinates", place.getLatLng().toString());
-//                startActivity(goToMap);
+                String coord = place.getLatLng().toString();
+                String latString = coord.substring(coord.indexOf("(") + 1,coord.indexOf(","));
+                double lat = Double.parseDouble(latString);
+
+                String lngString = coord.substring(coord.indexOf(",") + 1,coord.indexOf(")"));
+                double lng = Double.parseDouble(lngString);
+
+                LatLng newLocation = new LatLng(lat, lng);
+                mMap.addMarker(new MarkerOptions()
+                        .position(newLocation)
+                        .title(place.getName().toString()));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(newLocation));
 
             }
 
@@ -48,7 +77,10 @@ public class AddLocationActivity extends AppCompatActivity {
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
+
     }
+
+
 
 
 
