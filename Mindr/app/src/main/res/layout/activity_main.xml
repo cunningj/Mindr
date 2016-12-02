@@ -33,18 +33,6 @@
                 android:textColor="#fff"
                 android:layout_marginBottom="10dp"/>
 
-            <Button
-                android:id="@+id/look_at_map"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="Look At Map"
-                android:onClick="lookAtMapClick"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:background="#666"
-                android:textColor="#fff"
-                android:layout_marginBottom="10dp"/>
-
 
             <Button
                 android:id="@+id/add_list_page"

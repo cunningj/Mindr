@@ -50,10 +50,12 @@ app.post('/api/listItems', (req, res) => {
 
 // this route adds a list to the database from the AddListActivity
 app.post('/api/addList', (req, res) => {
-  console.log("adding new list")
-  console.log(req.body)
+
   var re = /item*/;
   var itemsArr = [];
+  var sql =  "";
+  var sqlTwo = "";
+  var nothing= [];
 
   // this function makes itemsArr an array of arrays with a single item in each (that is syntax required by SQL)
   for(key in req.body){
@@ -63,33 +65,49 @@ app.post('/api/addList', (req, res) => {
       itemsArr.push(newArr);
     }
   }
-
-  // allows us to add lines to our query based on the number of items we have added from frontend
-  var sql =  "";
-  for (var i = 0; i<itemsArr.length; i++) {
-    sql = sql + "INSERT INTO remindr.list_items (listID, item) VALUES (LAST_INSERT_ID(), '" + itemsArr[i] + "'); \n"
-  }
-
+  
+  // This is the connection query for when a location name is already set (most probably case)
   if (connection.query(`SELECT locationName FROM remindr.list_prefs WHERE locationName="${req.body.locationName}"`)){
-    connection.query(`UPDATE remindr.list_prefs SET listName = "${req.body.listName}", approaching = "${req.body.approaching}", alertRange ="${req.body.alertRange}" WHERE locationName="${req.body.locationName}"`,
 
-    function(err,rows) {
-    if(err) throw err;
-    res.json(["success"])
+    connection.query(`SELECT listID FROM remindr.list_prefs WHERE locationName="${req.body.locationName}"`, 
+      function(err, rows){
+        if(err) throw err;
+        //Nothing is the id array 
+        nothing = rows.map(row => row.listID)
+        // res.json(rows.map(row => row.item))
+        for (var i = 0; i<itemsArr.length; i++) {
+          sqlTwo = sqlTwo + "INSERT INTO remindr.list_items (listID, item) VALUES ('" + nothing[0] + "', '" + itemsArr[i] + "'); \n"
+        }
 
-    })
+        connection.query(`UPDATE remindr.list_prefs SET listName = "${req.body.listName}", approaching = "${req.body.approaching}", alertRange ="${req.body.alertRange}" WHERE locationName="${req.body.locationName}";
+          ${sqlTwo}`,
+          function(err,rows) {
+          if(err) throw err;
+          res.json(["success"])
+          }
+        )    
+      }
+    )
+  }
+  // else {  // we don't really expect this to run
+  //   console.log("THIS SHOULDNT BE RUNNING")
+  //   for (var i = 0; i<itemsArr.length; i++) {
+  //     sql = sql + "INSERT INTO remindr.list_items (listID, item) VALUES (LAST_INSERT_ID(), '" + itemsArr[i] + "'); \n"
+  //   }
 
-  } else { connection.query(
-    `INSERT INTO remindr.list_prefs (listName, approaching, alertRange, locationName) VALUES ("${req.body.listName}","${req.body.approaching}","${req.body.alertRange}","${req.body.locationName}");
-    SELECT LAST_INSERT_ID();
-    ${sql}`,
+  //   connection.query(
+  //   `INSERT INTO remindr.list_prefs (listName, approaching, alertRange, locationName) VALUES ("${req.body.listName}","${req.body.approaching}","${req.body.alertRange}","${req.body.locationName}");
+  //   SELECT LAST_INSERT_ID();
+  //   ${sql}`,
 
-     function(err,rows) {
-      if(err) throw err;
-      res.json(["success"])
+  //    function(err,rows) {
+  //     if(err) throw err;
+  //     res.json(["success"])
 
-    })
-  }})
+  //    }
+  //   )
+  // }
+})
 
 app.post('/api/addLocation', (req, res) => {
   connection.query(

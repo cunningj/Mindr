@@ -1,8 +1,14 @@
 package com.example.ownerperson.mindr;
 
+import android.*;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,18 +18,28 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
 import java.util.List;
 
+
 public class MainActivity extends AppCompatActivity {
+
+
 
     Context context;
 
     public static final String baseURL = "http://10.0.2.2:3000/";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
 
 
         context = this;
@@ -57,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
 
 
     public void addLocationClick(View view) {

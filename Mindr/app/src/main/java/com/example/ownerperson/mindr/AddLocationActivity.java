@@ -2,9 +2,11 @@ package com.example.ownerperson.mindr;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -38,6 +41,7 @@ public class AddLocationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
 
@@ -52,9 +56,12 @@ public class AddLocationActivity extends AppCompatActivity {
             public void onMapReady(GoogleMap googleMap) {
                 //System.out.println("onMapReady callback");
                 mMap = googleMap;
+
                 // Add current location marker here
 
             }
+
+
         });
 
 
