@@ -13,9 +13,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-/**
- * Created by ownerperson on 29/11/16.
- */
 
 public class HttpGetStringList extends AsyncTask<String,Void, List<String>> {
 

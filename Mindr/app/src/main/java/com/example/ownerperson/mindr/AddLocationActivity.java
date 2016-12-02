@@ -16,6 +16,9 @@ public class AddLocationActivity extends AppCompatActivity {
     //Figure out what Tag is? Randomly added to pacify red squiggly line overlords
     private static final String TAG = "AddLocationActivity";
 
+    final AppCompatActivity self = this;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +30,16 @@ public class AddLocationActivity extends AppCompatActivity {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
                 Log.i(TAG, "Lat/log " + place.getLatLng());
+                Log.i(TAG, "ID " + place.getId());
+
+                Intent goToMap = new Intent(self, MapsActivity.class);
+                //this is working to send over the latlng screen to map activity, need to know how to get information
+                // in a format that we can use to addmarker with latlng
+                goToMap.putExtra("coordinates", place.getLatLng().toString());
+                startActivity(goToMap);
+
             }
 
             @Override
