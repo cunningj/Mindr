@@ -30,7 +30,6 @@ public class AddLocationActivity extends AppCompatActivity {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
                 Log.i(TAG, "Lat/log " + place.getLatLng());
-
             }
 
             @Override
