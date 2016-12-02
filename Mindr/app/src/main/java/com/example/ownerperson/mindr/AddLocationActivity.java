@@ -1,11 +1,15 @@
 package com.example.ownerperson.mindr;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
@@ -25,6 +29,11 @@ public class AddLocationActivity extends AppCompatActivity {
     private static final String TAG = "AddLocationActivity";
     private GoogleMap mMap;
     final AppCompatActivity self = this;
+
+    EditText locationName;
+    String latString;
+    String lngString;
+    Context context;
 
 
     @Override
@@ -57,10 +66,10 @@ public class AddLocationActivity extends AppCompatActivity {
                 Log.i(TAG, "ID " + place.getId());
 
                 String coord = place.getLatLng().toString();
-                String latString = coord.substring(coord.indexOf("(") + 1,coord.indexOf(","));
+                latString = coord.substring(coord.indexOf("(") + 1,coord.indexOf(","));
                 double lat = Double.parseDouble(latString);
 
-                String lngString = coord.substring(coord.indexOf(",") + 1,coord.indexOf(")"));
+                lngString = coord.substring(coord.indexOf(",") + 1,coord.indexOf(")"));
                 double lng = Double.parseDouble(lngString);
 
                 LatLng newLocation = new LatLng(lat, lng);
@@ -80,8 +89,25 @@ public class AddLocationActivity extends AppCompatActivity {
 
     }
 
+    public void confirmLocationClick(View view) {
 
+        context = this;
 
+        locationName = (EditText) findViewById(R.id.location_name);
+
+        String locationNameText = locationName.getText().toString();
+
+        try {
+            AsyncTask task = new PostLocationRequest().execute(locationNameText, latString, lngString);
+            task.get();
+
+        } catch(Exception e){
+            System.out.println(e.toString());
+            e.printStackTrace();
+        }
+
+        startActivity(new Intent(context, MainActivity.class));
+    }
 
 
 }

@@ -70,16 +70,33 @@ app.post('/api/addList', (req, res) => {
     sql = sql + "INSERT INTO remindr.list_items (listID, item) VALUES (LAST_INSERT_ID(), '" + itemsArr[i] + "'); \n"
   }
 
-  // this query uses templating syntax in order to use javascript variables as part of the query
-  connection.query(
-  `INSERT INTO remindr.list_prefs (listName, approaching, alertRange, locationName) VALUES ("${req.body.listName}","${req.body.approaching}","${req.body.alertRange}","${req.body.locationName}");
-  SELECT LAST_INSERT_ID();
-  ${sql}`,
+  if (connection.query(`SELECT locationName FROM remindr.list_prefs WHERE locationName="${req.body.locationName}"`)){
+    connection.query(`UPDATE remindr.list_prefs SET listName = "${req.body.listName}", approaching = "${req.body.approaching}", alertRange ="${req.body.alertRange}" WHERE locationName="${req.body.locationName}"`,
 
-   function(err,rows) {
+    function(err,rows) {
     if(err) throw err;
     res.json(["success"])
 
+    })
+
+  } else { connection.query(
+    `INSERT INTO remindr.list_prefs (listName, approaching, alertRange, locationName) VALUES ("${req.body.listName}","${req.body.approaching}","${req.body.alertRange}","${req.body.locationName}");
+    SELECT LAST_INSERT_ID();
+    ${sql}`,
+
+     function(err,rows) {
+      if(err) throw err;
+      res.json(["success"])
+
+    })
+  }})
+
+app.post('/api/addLocation', (req, res) => {
+  connection.query(
+  `INSERT INTO remindr.list_prefs (locationName, latitude, longitude) VALUES ("${req.body.locationName}","${req.body.latitude}","${req.body.longitude}")`,
+   function(err,rows) {
+    if(err) throw err;
+    res.json(["success"])
   })
 })
 
