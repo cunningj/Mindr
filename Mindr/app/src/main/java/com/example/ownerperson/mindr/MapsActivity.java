@@ -31,20 +31,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
 
         //get latitude
-        Bundle extras = getIntent().getExtras();
-        coord = extras.getString("coordinates");
-        String latString = coord.substring(coord.indexOf("(") + 1,coord.indexOf(","));
-        System.out.println("THIS IS LAT " + latString);
-        lat = Double.parseDouble(latString);
-        System.out.println("THIS IS LAT DOUBLE " + lat);
-
-        //get longitude
-        String lngString = coord.substring(coord.indexOf(",") + 1,coord.indexOf(")"));
-        System.out.println("THIS IS LONG " + lngString);
-        lng = Double.parseDouble(lngString);
-        System.out.println("THIS IS LAT DOUBLE " + lng);
-
-        System.out.println("these are coordinates " + coord);
+//        Bundle extras = getIntent().getExtras();
+//        coord = extras.getString("coordinates");
+//        String latString = coord.substring(coord.indexOf("(") + 1,coord.indexOf(","));
+//        System.out.println("THIS IS LAT " + latString);
+//        lat = Double.parseDouble(latString);
+//        System.out.println("THIS IS LAT DOUBLE " + lat);
+//
+//        //get longitude
+//        String lngString = coord.substring(coord.indexOf(",") + 1,coord.indexOf(")"));
+//        System.out.println("THIS IS LONG " + lngString);
+//        lng = Double.parseDouble(lngString);
+//        System.out.println("THIS IS LAT DOUBLE " + lng);
+//
+//        System.out.println("these are coordinates " + coord);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
