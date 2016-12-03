@@ -19,6 +19,9 @@ public class ViewListItems extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_list_items);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.logo);
+
 
         Bundle extras = getIntent().getExtras();
         String name = extras.getString("listName");
