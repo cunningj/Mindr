@@ -2,6 +2,7 @@ package com.example.ownerperson.mindr;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 
 import com.google.android.gms.common.api.Status;
@@ -25,6 +26,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+
     }
 
 
@@ -32,7 +34,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
 //        mMap = googleMap;
     }
-
-
 }
+
+
 

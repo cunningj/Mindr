@@ -29,6 +29,9 @@ public class AddListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_list);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.logo);
+
         List<String> locations = new ArrayList<String>();
         try {
             AsyncTask task = new HttpGetStringList().execute(MainActivity.baseURL + "api/locations");
