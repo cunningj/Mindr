@@ -46,12 +46,6 @@ public class AddListActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         locationSpinner.setAdapter(adapter);
 
-        Spinner alertRangeSpinner = (Spinner) findViewById(R.id.alert_spinner);
-        ArrayAdapter<CharSequence> alert_adapter = ArrayAdapter.createFromResource(this,
-                R.array.alert_ranges, android.R.layout.simple_spinner_item);
-        alert_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        alertRangeSpinner.setAdapter(alert_adapter);
-
     }
 
     List<String> items = new ArrayList<String>();
@@ -96,7 +90,6 @@ public class AddListActivity extends AppCompatActivity {
         listName = (EditText) findViewById(R.id.list_name);
         locationName = (Spinner) findViewById(R.id.location_spinner);
         approaching = (Switch) findViewById(R.id.approaching);
-        alertRange = (Spinner) findViewById(R.id.alert_spinner);
         lastItem = (EditText) findViewById(R.id.list_item);
 
 
@@ -114,7 +107,6 @@ public class AddListActivity extends AppCompatActivity {
 
         String listNameText = listName.getText().toString();
         String locationNameText = locationName.getSelectedItem().toString();
-        String alertRangeText = alertRange.getSelectedItem().toString();
 
         items.add(lastItem.getText().toString());
 
@@ -122,7 +114,7 @@ public class AddListActivity extends AppCompatActivity {
 
         context = this;
 
-        String[] baseParams = {listNameText, locationNameText, approachingNum, alertRangeText};
+        String[] baseParams = {listNameText, locationNameText, approachingNum};
         System.out.println("here are baseparams " + baseParams);
         List<String> params = new LinkedList<String>(Arrays.asList(baseParams));
         params.addAll(items);

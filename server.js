@@ -79,7 +79,7 @@ app.post('/api/addList', (req, res) => {
           sqlTwo = sqlTwo + "INSERT INTO remindr.list_items (listID, item) VALUES ('" + nothing[0] + "', '" + itemsArr[i] + "'); \n"
         }
 
-        connection.query(`UPDATE remindr.list_prefs SET listName = "${req.body.listName}", approaching = "${req.body.approaching}", alertRange ="${req.body.alertRange}" WHERE locationName="${req.body.locationName}";
+        connection.query(`UPDATE remindr.list_prefs SET listName = "${req.body.listName}", approaching = "${req.body.approaching}" WHERE locationName="${req.body.locationName}";
           ${sqlTwo}`,
           function(err,rows) {
           if(err) throw err;
@@ -125,6 +125,7 @@ app.delete('/api/delete', (req, res) => {
 
   if(req.body.item){
     // If we are deleting an individual item
+    // will cause bug if there are more than one item with the same name
     connection.query(
     `DELETE FROM remindr.list_items WHERE item="${req.body.item}" LIMIT 1`,
      function(err,rows) {
@@ -145,7 +146,6 @@ app.delete('/api/delete', (req, res) => {
         connection.query(
         `DELETE FROM remindr.list_items WHERE listID = "${listID}";
          UPDATE remindr.list_prefs SET approaching = NULL WHERE listName = "${req.body.list}";
-         UPDATE remindr.list_prefs SET alertRange = NULL WHERE listName = "${req.body.list}";
          UPDATE remindr.list_prefs SET listName = NULL WHERE listName = "${req.body.list}"`,
          function(err,rows) {
           if(err) throw err;

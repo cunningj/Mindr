@@ -38,7 +38,6 @@ public class PostListRequest extends AsyncTask<String, Void, List<String>> {
         reqData.put("listName", args[0]);
         reqData.put("locationName", args[1]);
         reqData.put("approaching", args[2]);
-        reqData.put("alertRange", args[3]);
         int arraySize = args.length;
 
         for (int i = 4; i < arraySize; i++) {
