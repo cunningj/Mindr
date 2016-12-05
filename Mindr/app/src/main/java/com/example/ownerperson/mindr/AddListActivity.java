@@ -1,11 +1,19 @@
 package com.example.ownerperson.mindr;
 
+import android.*;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -16,6 +24,15 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +40,26 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class AddListActivity extends AppCompatActivity {
+public class AddListActivity extends AppCompatActivity implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        ResultCallback<Status> {
+
+    private GoogleApiClient googleApiClient;
+
+    List<String> items = new ArrayList<String>();
+
+    EditText previousItem;
+    String previousText;
+    TextView newTextView;
+    EditText listName;
+    Switch approaching;
+    Spinner alertRange;
+    Spinner locationName;
+    Context context;
+    EditText lastItem;
+    private static final String TAG = AddListActivity.class.getSimpleName();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +68,7 @@ public class AddListActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.logo);
 
+        createGoogleApi();
         List<String> locations = new ArrayList<String>();
         try {
             AsyncTask task = new HttpGetStringList().execute(MainActivity.baseURL + "api/locations");
@@ -48,11 +85,188 @@ public class AddListActivity extends AppCompatActivity {
 
     }
 
-    List<String> items = new ArrayList<String>();
+    private void createGoogleApi() {
+        Log.d(TAG, "createGoogleApi()");
+        if ( googleApiClient == null ) {
+            googleApiClient = new GoogleApiClient.Builder( this )
+                    .addConnectionCallbacks( this )
+                    .addOnConnectionFailedListener( this )
+                    .addApi( LocationServices.API )
+                    .build();
+        }
+    }
 
-    EditText previousItem;
-    String previousText;
-    TextView newTextView;
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Call GoogleApiClient connection when starting the Activity
+        googleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // Disconnect GoogleApiClient when stopping Activity
+        googleApiClient.disconnect();
+    }
+
+    // GoogleApiClient.ConnectionCallbacks connected
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.i(TAG, "onConnected()");
+    }
+
+    // GoogleApiClient.ConnectionCallbacks suspended
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.w(TAG, "onConnectionSuspended()");
+    }
+
+    // GoogleApiClient.OnConnectionFailedListener fail
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.w(TAG, "onConnectionFailed()");
+    }
+
+
+
+
+
+
+
+
+    private static final long GEO_DURATION = 60 * 60 * 1000;
+    private static final String GEOFENCE_REQ_ID = "My Geofence";
+    private static final float GEOFENCE_RADIUS = 500.0f; // in meters
+
+    // Create a Geofence
+    private Geofence createGeofence(LatLng latLng, float radius ) {
+        Log.d(TAG, "createGeofence");
+        return new Geofence.Builder()
+                .setRequestId(GEOFENCE_REQ_ID)
+                .setCircularRegion( latLng.latitude, latLng.longitude, radius)
+                .setExpirationDuration( GEO_DURATION )
+                .setTransitionTypes( Geofence.GEOFENCE_TRANSITION_ENTER
+                        | Geofence.GEOFENCE_TRANSITION_EXIT )
+                .build();
+    }
+
+    // Create a Geofence Request
+    private GeofencingRequest createGeofenceRequest(Geofence geofence ) {
+        Log.d(TAG, "createGeofenceRequest");
+        return new GeofencingRequest.Builder()
+                .setInitialTrigger( GeofencingRequest.INITIAL_TRIGGER_ENTER )
+                .addGeofence( geofence )
+                .build();
+    }
+
+
+
+    private PendingIntent geoFencePendingIntent;
+    private final int GEOFENCE_REQ_CODE = 0;
+    private PendingIntent createGeofencePendingIntent() {
+        Log.d(TAG, "createGeofencePendingIntent");
+        if ( geoFencePendingIntent != null )
+            return geoFencePendingIntent;
+
+        Intent intent = new Intent( this, GeofenceTransitionService.class);
+        return PendingIntent.getService(
+                this, GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT );
+    }
+
+    //ADDED BASED ON CODE EXAMPLE
+    private final int REQ_PERMISSION = 999;
+
+    // Check for permission to access Location
+    private boolean checkPermission() {
+        Log.d(TAG, "checkPermission()");
+        // Ask for permission if it wasn't granted yet
+        return (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED );
+    }
+
+    // Asks for permission
+    private void askPermission() {
+        Log.d(TAG, "askPermission()");
+        ActivityCompat.requestPermissions(
+                this,
+                new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION },
+                REQ_PERMISSION
+        );
+    }
+
+    // Verify user's response of the permission requested
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d(TAG, "onRequestPermissionsResult()");
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch ( requestCode ) {
+            case REQ_PERMISSION: {
+                if ( grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
+                    // Permission granted
+
+                } else {
+                    // Permission denied
+                    permissionsDenied();
+                }
+                break;
+            }
+        }
+    }
+
+    // App cannot work without the permissions
+    private void permissionsDenied() {
+        Log.w(TAG, "permissionsDenied()");
+    }
+
+    // Start Geofence creation process
+
+    @Override
+    public void onResult(@NonNull Status status) {
+        Log.i(TAG, "onResult: " + status);
+        if ( status.isSuccess() ) {
+            System.out.println("On Result Callback?");
+        } else {
+            // inform about fail
+        }
+    }
+
+
+
+    //     Add the created GeofenceRequest to the device's monitoring list
+    private void addGeofence(GeofencingRequest request) {
+        Log.d(TAG, "addGeofence");
+        if (checkPermission()) {
+            LocationServices.GeofencingApi.addGeofences(
+                    googleApiClient,
+                    request,
+                    createGeofencePendingIntent()
+            ).setResultCallback(AddListActivity.this);
+        }
+    }
+
+    public void startGeofence(double lat, double lng) {
+        Log.i(TAG, "startGeofence()");
+        ///// we will need to do our get request here for the coordinates
+        LatLng lastCoordinates = new LatLng(lat, lng);
+        System.out.println("lastCoordinates: " + lastCoordinates);
+        if( true ) {
+            Geofence geofence = createGeofence( lastCoordinates, GEOFENCE_RADIUS );
+            System.out.println("geofence baby: " + geofence);
+
+            GeofencingRequest geofenceRequest = createGeofenceRequest( geofence );
+            addGeofence( geofenceRequest );
+        } else {
+            Log.e(TAG, "Geofence marker is null");
+        }
+    }
+
+
 
 
     public void addListItem(View view){
@@ -71,18 +285,7 @@ public class AddListActivity extends AppCompatActivity {
         itemTextBoxes.addView(textBox);
         previousItem.setText("");
 
-        System.out.println("This is items " + items);
-
-
-
     }
-
-    EditText listName;
-    Switch approaching;
-    Spinner alertRange;
-    Spinner locationName;
-    Context context;
-    EditText lastItem;
 
     public void submitListClick(View view) {
 
@@ -110,19 +313,17 @@ public class AddListActivity extends AppCompatActivity {
 
         items.add(lastItem.getText().toString());
 
-        System.out.println("here are items " + items);
-
         context = this;
 
         String[] baseParams = {listNameText, locationNameText, approachingNum};
-        System.out.println("here are baseparams " + baseParams);
         List<String> params = new LinkedList<String>(Arrays.asList(baseParams));
         params.addAll(items);
 
-        System.out.println("here are params " + params);
         try {
             AsyncTask task = new PostListRequest().execute((String[])params.toArray(new String[params.size()]));
             task.get();
+            startGeofence(46.8787, -113.9966);
+
 
         } catch(Exception e){
             System.out.println(e.toString());

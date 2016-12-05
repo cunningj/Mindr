@@ -40,7 +40,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        ResultCallback<Status>,
         LocationListener {
 
 
@@ -126,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+
     private void createGoogleApi() {
         Log.d(TAG, "createGoogleApi()");
         if ( googleApiClient == null ) {
@@ -195,6 +195,54 @@ public class MainActivity extends AppCompatActivity implements
         else askPermission();
     }
 
+    //ADDED BASED ON CODE EXAMPLE
+    private final int REQ_PERMISSION = 999;
+
+    // Check for permission to access Location
+    private boolean checkPermission() {
+        Log.d(TAG, "checkPermission()");
+        // Ask for permission if it wasn't granted yet
+        return (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED );
+    }
+
+    // Asks for permission
+    private void askPermission() {
+        Log.d(TAG, "askPermission()");
+        ActivityCompat.requestPermissions(
+                this,
+                new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION },
+                REQ_PERMISSION
+        );
+    }
+
+    // Verify user's response of the permission requested
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d(TAG, "onRequestPermissionsResult()");
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch ( requestCode ) {
+            case REQ_PERMISSION: {
+                if ( grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
+                    // Permission granted
+                    getLastKnownLocation();
+
+                } else {
+                    // Permission denied
+                    permissionsDenied();
+                }
+                break;
+            }
+        }
+    }
+
+    // App cannot work without the permissions
+    private void permissionsDenied() {
+        Log.w(TAG, "permissionsDenied()");
+    }
+
+
     private LocationRequest locationRequest;
     // Defined in mili seconds.
     // This number in extremely low, and should be used only for debug
@@ -230,141 +278,6 @@ public class MainActivity extends AppCompatActivity implements
         writeActualLocation(lastLocation);
     }
 
-    //ADDED BASED ON CODE EXAMPLE
-    private final int REQ_PERMISSION = 999;
-
-    // Check for permission to access Location
-    private boolean checkPermission() {
-        Log.d(TAG, "checkPermission()");
-        // Ask for permission if it wasn't granted yet
-        return (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED );
-    }
-
-    // Asks for permission
-    private void askPermission() {
-        Log.d(TAG, "askPermission()");
-        ActivityCompat.requestPermissions(
-                this,
-                new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
-                REQ_PERMISSION
-        );
-    }
-
-    // Verify user's response of the permission requested
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d(TAG, "onRequestPermissionsResult()");
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch ( requestCode ) {
-            case REQ_PERMISSION: {
-                if ( grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
-                    // Permission granted
-                    getLastKnownLocation();
-                    startGeofence();
-
-                } else {
-                    // Permission denied
-                    permissionsDenied();
-                }
-                break;
-            }
-        }
-    }
-
-    // App cannot work without the permissions
-    private void permissionsDenied() {
-        Log.w(TAG, "permissionsDenied()");
-    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch ( item.getItemId() ) {
-//            case R.id.geofence: {
-//                startGeofence();
-//                return true;
-//            }
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-
-    // Start Geofence creation process
-
-    @Override
-    public void onResult(@NonNull Status status) {
-        Log.i(TAG, "onResult: " + status);
-        if ( status.isSuccess() ) {
-            System.out.println("On Result Callback?");
-        } else {
-            // inform about fail
-        }
-    }
-
-    private void startGeofence() {
-        Log.i(TAG, "startGeofence()");
-        LatLng lastCoordinates = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-        System.out.println("lastCoordinates: " + lastCoordinates);
-        if( true ) {
-            Geofence geofence = createGeofence( lastCoordinates, GEOFENCE_RADIUS );
-            System.out.println("geofence baby: " + geofence);
-
-            GeofencingRequest geofenceRequest = createGeofenceRequest( geofence );
-            addGeofence( geofenceRequest );
-            System.out.println("GEOFENCE WOULD BE CREATED HERE. HERE IS LAST LOCATION: " + lastLocation);
-        } else {
-            Log.e(TAG, "Geofence marker is null");
-        }
-    }
-
-    private static final long GEO_DURATION = 60 * 60 * 1000;
-    private static final String GEOFENCE_REQ_ID = "My Geofence";
-    private static final float GEOFENCE_RADIUS = 500.0f; // in meters
-
-    // Create a Geofence
-    private Geofence createGeofence(LatLng latLng, float radius ) {
-        Log.d(TAG, "createGeofence");
-        return new Geofence.Builder()
-                .setRequestId(GEOFENCE_REQ_ID)
-                .setCircularRegion( latLng.latitude, latLng.longitude, radius)
-                .setExpirationDuration( GEO_DURATION )
-                .setTransitionTypes( Geofence.GEOFENCE_TRANSITION_ENTER
-                        | Geofence.GEOFENCE_TRANSITION_EXIT )
-                .build();
-    }
-
-    // Create a Geofence Request
-    private GeofencingRequest createGeofenceRequest(Geofence geofence ) {
-        Log.d(TAG, "createGeofenceRequest");
-        return new GeofencingRequest.Builder()
-                .setInitialTrigger( GeofencingRequest.INITIAL_TRIGGER_ENTER )
-                .addGeofence( geofence )
-                .build();
-    }
-
-    private PendingIntent geoFencePendingIntent;
-    private final int GEOFENCE_REQ_CODE = 0;
-    private PendingIntent createGeofencePendingIntent() {
-        Log.d(TAG, "createGeofencePendingIntent");
-        if ( geoFencePendingIntent != null )
-            return geoFencePendingIntent;
-
-        Intent intent = new Intent( this, GeofenceTransitionService.class);
-        return PendingIntent.getService(
-                this, GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT );
-    }
-
-//     Add the created GeofenceRequest to the device's monitoring list
-    private void addGeofence(GeofencingRequest request) {
-        Log.d(TAG, "addGeofence");
-        if (checkPermission()) {
-            LocationServices.GeofencingApi.addGeofences(
-                    googleApiClient,
-                    request,
-                    createGeofencePendingIntent()
-            ).setResultCallback(MainActivity.this);
-        }
-    }
 
 
 
@@ -375,10 +288,6 @@ public class MainActivity extends AppCompatActivity implements
 
     public void addListClick(View view) {
         startActivity(new Intent(context, AddListActivity.class));
-    }
-
-    public void lookAtMapClick(View view) {
-        startActivity(new Intent(context, MapsActivity.class));
     }
 
 
