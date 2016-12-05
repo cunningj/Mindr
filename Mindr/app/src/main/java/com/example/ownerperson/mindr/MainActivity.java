@@ -25,6 +25,8 @@ import android.widget.LinearLayout;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
@@ -38,6 +40,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
+        ResultCallback<Status>,
         LocationListener {
 
 
@@ -288,12 +291,26 @@ public class MainActivity extends AppCompatActivity implements
 
     // Start Geofence creation process
 
+    @Override
+    public void onResult(@NonNull Status status) {
+        Log.i(TAG, "onResult: " + status);
+        if ( status.isSuccess() ) {
+            System.out.println("On Result Callback?");
+        } else {
+            // inform about fail
+        }
+    }
+
     private void startGeofence() {
         Log.i(TAG, "startGeofence()");
+        LatLng lastCoordinates = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+        System.out.println("lastCoordinates: " + lastCoordinates);
         if( true ) {
-//            Geofence geofence = createGeofence( LatLng, GEOFENCE_RADIUS );
+            Geofence geofence = createGeofence( lastCoordinates, GEOFENCE_RADIUS );
+            System.out.println("geofence baby: " + geofence);
+
             GeofencingRequest geofenceRequest = createGeofenceRequest( geofence );
-//            addGeofence( geofenceRequest );
+            addGeofence( geofenceRequest );
             System.out.println("GEOFENCE WOULD BE CREATED HERE. HERE IS LAST LOCATION: " + lastLocation);
         } else {
             Log.e(TAG, "Geofence marker is null");
@@ -337,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements
                 this, GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT );
     }
 
-    // Add the created GeofenceRequest to the device's monitoring list
+//     Add the created GeofenceRequest to the device's monitoring list
     private void addGeofence(GeofencingRequest request) {
         Log.d(TAG, "addGeofence");
         if (checkPermission()) {
@@ -345,7 +362,7 @@ public class MainActivity extends AppCompatActivity implements
                     googleApiClient,
                     request,
                     createGeofencePendingIntent()
-            ).setResultCallback(this);
+            ).setResultCallback(MainActivity.this);
         }
     }
 
