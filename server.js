@@ -138,6 +138,7 @@ app.delete('/api/delete', (req, res) => {
 
     connection.query(`SELECT listID FROM remindr.list_prefs WHERE listName="${req.body.list}"`, 
       function(err,rows){
+        //get list id so we can delete all the items
         var listID = rows.map(row => row.listID)
         console.log("listID: ", listID)
         if(err) throw err;
