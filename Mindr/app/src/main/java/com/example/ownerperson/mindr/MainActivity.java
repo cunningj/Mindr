@@ -43,24 +43,42 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
         context = this;
 
         try {
             AsyncTask task = new HttpGetStringList().execute(MainActivity.baseURL + "api/listPrefs");
             List<String> activities = (List<String>) task.get();
-            LinearLayout buttons = (LinearLayout) findViewById(R.id.list_buttons);
+            final LinearLayout buttons = (LinearLayout) findViewById(R.id.list_buttons);
             for (String activity : activities) {
-                    Button listButton = new Button(this);
+                    final AppCompatActivity self = this;
+                    final Button listButton = new Button(this);
+                    final String listName = activity;
                     listButton.setText(activity);
                     listButton.setLayoutParams(new Toolbar.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT));
+
+                    final Button deleteButton = new Button(this);
+                    deleteButton.setLayoutParams(new Toolbar.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                    deleteButton.setText("X");
+                    deleteButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            try {
+
+                                AsyncTask task = new HttpDeleteRequest().execute(MainActivity.baseURL + "api/delete", listName, "list");
+                                task.get();
+                                buttons.removeView(deleteButton);
+                                buttons.removeView(listButton);
+                            } catch (Exception e) {
+                                System.out.println(e.toString());
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
                     final String buttonName = activity;
-                    final AppCompatActivity self = this;
                     listButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
 
@@ -72,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                     buttons.addView(listButton);
+                    buttons.addView(deleteButton);
             }
         } catch (Exception e) {
             System.out.println(e.toString());

@@ -117,5 +117,48 @@ app.post('/api/addLocation', (req, res) => {
     res.json(["success"])
   })
 })
+// DELETE FROM remindr.list_items WHERE item IS NULL LIMIT 1;
+
+app.delete('/api/delete', (req, res) => {
+
+  console.log("req body ", req.body)
+
+  if(req.body.item){
+    // If we are deleting an individual item
+    connection.query(
+    `DELETE FROM remindr.list_items WHERE item="${req.body.item}" LIMIT 1`,
+     function(err,rows) {
+      if(err) throw err;
+      console.log("success")
+      res.json(["success"])
+    })
+  } else if(req.body.list){
+    // If we are deleting a list, delete all items with the corresponding list ID AND make approaching, alertRange and listName NULL
+    console.log("req list: ", req.body.list)
+
+    connection.query(`SELECT listID FROM remindr.list_prefs WHERE listName="${req.body.list}"`, 
+      function(err,rows){
+        var listID = rows.map(row => row.listID)
+        console.log("listID: ", listID)
+        if(err) throw err;
+        connection.query(
+        `DELETE FROM remindr.list_items WHERE listID = "${listID}";
+         UPDATE remindr.list_prefs SET approaching = NULL WHERE listName = "${req.body.list}";
+         UPDATE remindr.list_prefs SET alertRange = NULL WHERE listName = "${req.body.list}";
+         UPDATE remindr.list_prefs SET listName = NULL WHERE listName = "${req.body.list}"`,
+         function(err,rows) {
+          if(err) throw err;
+          console.log("success")
+          res.json(["success"])
+        })
+      })
+    
+  }
+
+})
 
 app.listen(3000)
+
+
+
+

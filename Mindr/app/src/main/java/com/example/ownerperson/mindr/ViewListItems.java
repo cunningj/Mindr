@@ -1,6 +1,6 @@
 package com.example.ownerperson.mindr;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +14,8 @@ import android.widget.TextView;
 import java.util.List;
 
 public class ViewListItems extends AppCompatActivity {
+    Context context;
+    LinearLayout buttons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,22 +35,42 @@ public class ViewListItems extends AppCompatActivity {
         try {
             AsyncTask task =new GetListItemsRequest().execute(name);
             List<String> items = (List<String>) task.get();
-            LinearLayout buttons = (LinearLayout) findViewById(R.id.list_item_names);
+            buttons = (LinearLayout) findViewById(R.id.list_item_names);
 
             for(String item : items){
-                Button listButton = new Button(this);
+                final String itemFinal = item;
+                final Button listButton = new Button(this);
+
                 listButton.setText(item);
                 listButton.setLayoutParams(new Toolbar.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
                 buttons.addView(listButton);
 
+                final Button deleteItemButton = new Button(this);
+                buttons.addView(deleteItemButton);
+                deleteItemButton.setText("Delete Item");
+                deleteItemButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        try {
+                            AsyncTask task = new HttpDeleteRequest().execute(MainActivity.baseURL + "api/delete", itemFinal, "item");
+                            System.out.println("This is final: " + itemFinal);
+                            task.get();
+                            buttons.removeView(deleteItemButton);
+                            buttons.removeView(listButton);
+                        } catch (Exception e) {
+                            System.out.println(e.toString());
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
             }
         } catch(Exception e){
             System.out.println(e.toString());
         }
 
-
-
     }
+
+
 }
