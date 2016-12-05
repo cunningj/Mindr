@@ -19,11 +19,9 @@ import com.google.android.gms.location.GeofencingEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by ownerperson on 05/12/16.
- */
 
 public class GeofenceTransitionService extends IntentService {
+
 
     private static final String TAG = GeofenceTransitionService.class.getSimpleName();
     public static final int GEOFENCE_NOTIFICATION_ID = 0;
@@ -34,6 +32,8 @@ public class GeofenceTransitionService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        System.out.println("got into on handle intent");
+
         // Retrieve the Geofencing intent
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
@@ -62,20 +62,25 @@ public class GeofenceTransitionService extends IntentService {
     private String getGeofenceTransitionDetails(int geoFenceTransition, List<Geofence> triggeringGeofences) {
         // get the ID of each geofence triggered
         ArrayList<String> triggeringGeofencesList = new ArrayList<>();
+        System.out.println("triggeringGeofencesList inside get details, " + triggeringGeofencesList);
+
         for ( Geofence geofence : triggeringGeofences ) {
             triggeringGeofencesList.add( geofence.getRequestId() );
         }
 
         String status = null;
-        if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER )
+        if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ) {
+            System.out.println("GEOFENCE_TRANSITION_ENTER");
             status = "Entering ";
-        else if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT )
+        } else if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT )
             status = "Exiting ";
         return status + TextUtils.join( ", ", triggeringGeofencesList);
     }
 
     // Send a notification
     private void sendNotification( String msg ) {
+        System.out.println("get into sendNotification");
+
         Log.i(TAG, "sendNotification: " + msg );
 
         // Intent to start the main Activity

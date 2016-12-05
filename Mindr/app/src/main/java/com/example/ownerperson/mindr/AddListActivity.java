@@ -141,7 +141,7 @@ public class AddListActivity extends AppCompatActivity implements
 
     private static final long GEO_DURATION = 60 * 60 * 1000;
     private static final String GEOFENCE_REQ_ID = "My Geofence";
-    private static final float GEOFENCE_RADIUS = 500.0f; // in meters
+    private static final float GEOFENCE_RADIUS = 16000.0f; // in meters
 
     // Create a Geofence
     private Geofence createGeofence(LatLng latLng, float radius ) {
@@ -173,7 +173,9 @@ public class AddListActivity extends AppCompatActivity implements
         if ( geoFencePendingIntent != null )
             return geoFencePendingIntent;
 
+        System.out.println("before setting intent to go to GeofenceTransitionService.class");
         Intent intent = new Intent( this, GeofenceTransitionService.class);
+        System.out.println("after setting intent to go to GeofenceTransitionService.class");
         return PendingIntent.getService(
                 this, GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT );
     }
@@ -242,11 +244,14 @@ public class AddListActivity extends AppCompatActivity implements
     private void addGeofence(GeofencingRequest request) {
         Log.d(TAG, "addGeofence");
         if (checkPermission()) {
+            System.out.println("inside addGeofence first line");
             LocationServices.GeofencingApi.addGeofences(
                     googleApiClient,
                     request,
                     createGeofencePendingIntent()
             ).setResultCallback(AddListActivity.this);
+            System.out.println("inside addGeofence last line");
+
         }
     }
 
@@ -261,6 +266,9 @@ public class AddListActivity extends AppCompatActivity implements
 
             GeofencingRequest geofenceRequest = createGeofenceRequest( geofence );
             addGeofence( geofenceRequest );
+
+            System.out.println("lastCoordinates " + lastCoordinates);
+            System.out.println("geofenceRequest " + geofenceRequest);
         } else {
             Log.e(TAG, "Geofence marker is null");
         }
@@ -322,7 +330,7 @@ public class AddListActivity extends AppCompatActivity implements
         try {
             AsyncTask task = new PostListRequest().execute((String[])params.toArray(new String[params.size()]));
             task.get();
-            startGeofence(46.8787, -113.9966);
+            startGeofence(46.8686846, -114.009869);
 
 
         } catch(Exception e){
