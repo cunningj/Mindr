@@ -48,6 +48,7 @@ public class AddLocationActivity extends AppCompatActivity {
         getSupportActionBar().setIcon(R.drawable.logo);
 
 
+
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
