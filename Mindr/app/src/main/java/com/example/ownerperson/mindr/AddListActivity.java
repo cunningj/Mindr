@@ -129,6 +129,10 @@ public class AddListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+        // get route
+        // get lat long
+        // set as extras and pass back to main activity lat/long vars
         startActivity(new Intent(context, MainActivity.class));
 
     }
