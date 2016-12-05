@@ -26,7 +26,7 @@ public class ViewListItems extends AppCompatActivity {
 
 
         Bundle extras = getIntent().getExtras();
-        String name = extras.getString("listName");
+        final String name = extras.getString("listName");
 
         TextView title = (TextView) findViewById(R.id.list_title);
         title.setText(name + " List");
@@ -53,7 +53,7 @@ public class ViewListItems extends AppCompatActivity {
                 deleteItemButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         try {
-                            AsyncTask task = new HttpDeleteRequest().execute(MainActivity.baseURL + "api/delete", itemFinal, "item");
+                            AsyncTask task = new HttpDeleteRequest().execute(MainActivity.baseURL + "api/delete", itemFinal, "item", name);
                             System.out.println("This is final: " + itemFinal);
                             task.get();
                             buttons.removeView(deleteItemButton);

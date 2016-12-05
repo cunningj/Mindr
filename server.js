@@ -48,6 +48,8 @@ app.post('/api/listItems', (req, res) => {
   })
 })
 
+
+
 // this route adds a list to the database from the AddListActivity
 app.post('/api/addList', (req, res) => {
 
@@ -126,13 +128,22 @@ app.delete('/api/delete', (req, res) => {
   if(req.body.item){
     // If we are deleting an individual item
     // will cause bug if there are more than one item with the same name
-    connection.query(
-    `DELETE FROM remindr.list_items WHERE item="${req.body.item}" LIMIT 1`,
-     function(err,rows) {
-      if(err) throw err;
-      console.log("success")
-      res.json(["success"])
-    })
+    connection.query(`SELECT listID FROM remindr.list_prefs WHERE listName="${req.body.listName}"`, 
+      function(err,rows){
+        //get list id so we can delete all the items
+        var listID = rows.map(row => row.listID)
+        console.log("listID: ", listID)
+        if(err) throw err;
+        connection.query(
+          `DELETE FROM remindr.list_items WHERE item="${req.body.item}" AND listID="${listID}" LIMIT 1`,
+           function(err,rows) {
+            if(err) throw err;
+            console.log("success")
+            res.json(["success"])
+            }
+        )
+      }
+    )
   } else if(req.body.list){
     // If we are deleting a list, delete all items with the corresponding list ID AND make approaching, alertRange and listName NULL
     console.log("req list: ", req.body.list)

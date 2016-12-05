@@ -20,10 +20,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-/**
- * Created by stephanieralls on 12/4/16.
- */
-
 public class HttpDeleteRequest extends AsyncTask<String,Void, List<String>> {
 
     Context context;
@@ -38,6 +34,7 @@ public class HttpDeleteRequest extends AsyncTask<String,Void, List<String>> {
         if(args[2] == "item"){
             System.out.println("We are in the list if " + args[2]);
             reqData.put("item", args[1]);
+            reqData.put("listName", args[3]);
         } else if (args[2] == "list"){
             reqData.put("list", args[1]);
             System.out.println("We are in the list else if " + args[2]);
