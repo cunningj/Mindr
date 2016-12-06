@@ -40,7 +40,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        LocationListener,
+        ResultCallback<Status> {
 
 
 
@@ -53,6 +54,13 @@ public class MainActivity extends AppCompatActivity implements
 
     public static final String baseURL = "http://10.0.2.2:3000/";
 
+    private static final String NOTIFICATION_MSG = "NOTIFICATION MSG!!!";
+    // Create a Intent send by the notification
+    public static Intent makeNotificationIntent(Context context, String msg) {
+        Intent intent = new Intent( context, MainActivity.class );
+        intent.putExtra( NOTIFICATION_MSG, msg );
+        return intent;
+    }
 
 
     @Override
@@ -264,6 +272,83 @@ public class MainActivity extends AppCompatActivity implements
     // App cannot work without the permissions
     private void permissionsDenied() {
         Log.w(TAG, "permissionsDenied()");
+    }
+
+    private static final long GEO_DURATION = 60 * 60 * 1000;
+    private static final String GEOFENCE_REQ_ID = "My Geofence";
+    private static final float GEOFENCE_RADIUS = 1600.0f; // in meters
+
+    // Create a Geofence
+    private Geofence createGeofence( LatLng latLng, float radius ) {
+        Log.d(TAG, "createGeofence");
+        return new Geofence.Builder()
+                .setRequestId(GEOFENCE_REQ_ID)
+                .setCircularRegion( latLng.latitude, latLng.longitude, radius)
+                .setExpirationDuration( GEO_DURATION )
+                .setTransitionTypes( Geofence.GEOFENCE_TRANSITION_ENTER
+                        | Geofence.GEOFENCE_TRANSITION_EXIT )
+                .build();
+    }
+
+    // Create a Geofence Request
+    private GeofencingRequest createGeofenceRequest( Geofence geofence ) {
+        Log.d(TAG, "createGeofenceRequest");
+        return new GeofencingRequest.Builder()
+                .setInitialTrigger( GeofencingRequest.INITIAL_TRIGGER_ENTER )
+                .addGeofence( geofence )
+                .build();
+    }
+
+    private PendingIntent geoFencePendingIntent;
+    private final int GEOFENCE_REQ_CODE = 0;
+    private PendingIntent createGeofencePendingIntent() {
+        Log.d(TAG, "createGeofencePendingIntent");
+        if ( geoFencePendingIntent != null )
+            return geoFencePendingIntent;
+
+        Intent intent = new Intent( this, GeofenceTransitionService.class);
+        return PendingIntent.getService(
+                this, GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT );
+    }
+
+    // Add the created GeofenceRequest to the device's monitoring list
+    private void addGeofence(GeofencingRequest request) {
+        Log.d(TAG, "addGeofence");
+        if (checkPermission())
+            LocationServices.GeofencingApi.addGeofences(
+                    googleApiClient,
+                    request,
+                    createGeofencePendingIntent()
+            ).setResultCallback(this);
+    }
+
+    @Override
+    public void onResult(@NonNull Status status) {
+        Log.i(TAG, "onResult: " + status);
+        if ( status.isSuccess() ) {
+            System.out.println("SUCCESS FROM ON RESULT - ADDED GEOFENCE");
+        } else {
+            // inform about fail
+        }
+    }
+
+
+    public void startGeofenceClick(View view) {
+                startGeofence();
+
+    }
+
+    // Start Geofence creation process
+    private void startGeofence() {
+        Log.i(TAG, "startGeofence()");
+        LatLng missoulaCoords = new LatLng(46.8686846, -114.009869);
+        if( true ) {
+            Geofence geofence = createGeofence( missoulaCoords, GEOFENCE_RADIUS );
+            GeofencingRequest geofenceRequest = createGeofenceRequest( geofence );
+            addGeofence( geofenceRequest );
+        } else {
+            Log.e(TAG, "Geofence marker is null");
+        }
     }
 
 
