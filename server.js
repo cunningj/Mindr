@@ -54,6 +54,7 @@ app.post('/api/addList', (req, res) => {
   var itemsArr = [];
   var sql =  "";
   var sqlTwo = "";
+  // nothing is a joke
   var nothing= [];
 
 // this function makes itemsArr an array of arrays with a single item in each (that is syntax required by SQL)
