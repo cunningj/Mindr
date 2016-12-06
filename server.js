@@ -11,7 +11,6 @@ var connection = mysql.createConnection({
 var bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
-
 connection.connect(function(err) {
   if (err) {
     console.error('error connecting: ' + err.stack);
@@ -48,8 +47,6 @@ app.post('/api/listItems', (req, res) => {
   })
 })
 
-
-
 // this route adds a list to the database from the AddListActivity
 app.post('/api/addList', (req, res) => {
 
@@ -59,7 +56,7 @@ app.post('/api/addList', (req, res) => {
   var sqlTwo = "";
   var nothing= [];
 
-  // this function makes itemsArr an array of arrays with a single item in each (that is syntax required by SQL)
+// this function makes itemsArr an array of arrays with a single item in each (that is syntax required by SQL)
   for(key in req.body){
     if (key.match(re) && req.body[key]){
       var newArr = [];
@@ -68,7 +65,7 @@ app.post('/api/addList', (req, res) => {
     }
   }
   
-  // This is the connection query for when a location name is already set (most probably case)
+// This is the connection query for when a location name is already set (most probably case)
   if (connection.query(`SELECT locationName FROM remindr.list_prefs WHERE locationName="${req.body.locationName}"`)){
 
     connection.query(`SELECT listID FROM remindr.list_prefs WHERE locationName="${req.body.locationName}"`, 
@@ -91,6 +88,8 @@ app.post('/api/addList', (req, res) => {
       }
     )
   }
+
+  // we will use this else statement only if we get around to being able to add locations from the Add List page
   // else {  // we don't really expect this to run
   //   console.log("THIS SHOULDNT BE RUNNING")
   //   for (var i = 0; i<itemsArr.length; i++) {
@@ -119,7 +118,6 @@ app.post('/api/addLocation', (req, res) => {
     res.json(["success"])
   })
 })
-// DELETE FROM remindr.list_items WHERE item IS NULL LIMIT 1;
 
 app.delete('/api/delete', (req, res) => {
 
@@ -127,7 +125,6 @@ app.delete('/api/delete', (req, res) => {
 
   if(req.body.item){
     // If we are deleting an individual item
-    // will cause bug if there are more than one item with the same name
     connection.query(`SELECT listID FROM remindr.list_prefs WHERE listName="${req.body.listName}"`, 
       function(err,rows){
         //get list id so we can delete all the items
@@ -138,16 +135,14 @@ app.delete('/api/delete', (req, res) => {
           `DELETE FROM remindr.list_items WHERE item="${req.body.item}" AND listID="${listID}" LIMIT 1`,
            function(err,rows) {
             if(err) throw err;
-            console.log("success")
             res.json(["success"])
             }
         )
       }
     )
   } else if(req.body.list){
-    // If we are deleting a list, delete all items with the corresponding list ID AND make approaching, alertRange and listName NULL
-    console.log("req list: ", req.body.list)
 
+    // If we are deleting a list, delete all items with the corresponding list ID AND make approaching, alertRange and listName NULL
     connection.query(`SELECT listID FROM remindr.list_prefs WHERE listName="${req.body.list}"`, 
       function(err,rows){
         //get list id so we can delete all the items
