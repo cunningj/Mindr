@@ -30,6 +30,7 @@ public class PostListRequest extends AsyncTask<String, Void, PostListRequest.Lat
     public static class LatLngResponse{
         public double latitude;
         public double longitude;
+        public int approaching;
     }
 
     private static final String ADD_LIST_ENDPOINT = MainActivity.baseURL + "api/addList";

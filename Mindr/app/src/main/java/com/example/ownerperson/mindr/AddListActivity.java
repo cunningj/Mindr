@@ -135,20 +135,18 @@ public class AddListActivity extends AppCompatActivity {
         try {
             AsyncTask task = new PostListRequest().execute((String[])params.toArray(new String[params.size()]));
             PostListRequest.LatLngResponse resp= (PostListRequest.LatLngResponse) task.get();
-            System.out.println("VICTORY lat : " + resp.latitude + " lng: " + resp.longitude);
+            System.out.println("VICTORY lat : " + resp.latitude + " lng: " + resp.longitude + " approaching: " + resp.approaching);
+
+            Intent sendCoordsToGeofence = new Intent(this, MainActivity.class);
+            sendCoordsToGeofence.putExtra("Latitude", resp.latitude);
+            sendCoordsToGeofence.putExtra("Longitude", resp.longitude);
+            sendCoordsToGeofence.putExtra("Approaching", resp.approaching);
+            startActivity(sendCoordsToGeofence);
 
         } catch(Exception e){
             System.out.println(e.toString());
             e.printStackTrace();
         }
-
-//
-//        // get route
-//        // get lat long
-//        // set as extras and pass back to main activity lat/long vars
-//        Intent sendCoordsToGeofence = new Intent(this, MainActivity.class);
-////        sendCoordsToGeofence.putExtra("LatLng", LatLng);
-//        startActivity(sendCoordsToGeofence);
 
     }
 

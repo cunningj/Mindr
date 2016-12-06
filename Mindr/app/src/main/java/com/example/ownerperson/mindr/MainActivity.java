@@ -145,6 +145,21 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+    public void onResume() {
+        super.onResume();
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            final Double latitudeExtra = extras.getDouble("Latitude");
+            final Double longitudeExtra = extras.getDouble("Longitude");
+            final int approachingExtra = extras.getInt("Approaching");
+
+            System.out.println("latitudeExtra: " + latitudeExtra);
+        }
+
+    }
+
+
     private void createGoogleApi() {
         Log.d(TAG, "createGoogleApi()");
         if ( googleApiClient == null ) {
@@ -353,8 +368,6 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-//    Bundle extras = getIntent().getExtras();
-//    final String latLngExtras = extras.getString("LatLng");
 
     // Start Geofence creation process
     private void startGeofence() {
@@ -380,10 +393,5 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    public void onResume() {
-        super.onResume();
-
-
-    }
 
 }
