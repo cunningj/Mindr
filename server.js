@@ -78,12 +78,23 @@ app.post('/api/addList', (req, res) => {
         for (var i = 0; i<itemsArr.length; i++) {
           sqlTwo = sqlTwo + "INSERT INTO remindr.list_items (listID, item) VALUES ('" + nothing[0] + "', '" + itemsArr[i] + "'); \n"
         }
-
+        console.log("S2: ", sqlTwo)
         connection.query(`UPDATE remindr.list_prefs SET listName = "${req.body.listName}", approaching = "${req.body.approaching}" WHERE locationName="${req.body.locationName}";
-          ${sqlTwo}`,
+          ${sqlTwo}
+          SELECT latitude, longitude, approaching FROM remindr.list_prefs WHERE locationName="${req.body.locationName}"`,
           function(err,rows) {
           if(err) throw err;
-          res.json(["success"])
+          const respData = rows.filter(row => row instanceof Array)
+                               .map(row => row[0])
+                               .map(row => {
+                                            return {
+                                              longitude : row.longitude,
+                                              latitude  : row.latitude,
+                                              approaching : row.approaching
+                                              }
+                               })[0]
+          console.log('responding with', respData)
+          res.json(respData)
           }
         )    
       }

@@ -148,14 +148,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onResume() {
         super.onResume();
 
-        Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            final Double latitudeExtra = extras.getDouble("Latitude");
-            final Double longitudeExtra = extras.getDouble("Longitude");
-            final int approachingExtra = extras.getInt("Approaching");
-
-            System.out.println("latitudeExtra: " + latitudeExtra);
-        }
 
     }
 
@@ -177,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // Call GoogleApiClient connection when starting the Activity
         googleApiClient.connect();
+
     }
 
     @Override
@@ -192,6 +185,18 @@ public class MainActivity extends AppCompatActivity implements
     public void onConnected(@Nullable Bundle bundle) {
         Log.i(TAG, "onConnected()");
         getLastKnownLocation();
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            final Double latitudeExtra = extras.getDouble("Latitude");
+            final Double longitudeExtra = extras.getDouble("Longitude");
+            final int approachingExtra = extras.getInt("Approaching");
+
+            System.out.println("latitudeExtra: " + latitudeExtra);
+
+            startGeofence(latitudeExtra, longitudeExtra);
+        }
+
     }
 
     // GoogleApiClient.ConnectionCallbacks suspended
@@ -363,19 +368,16 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    public void startGeofenceClick(View view) {
-                startGeofence();
-
-    }
-
-
     // Start Geofence creation process
-    private void startGeofence() {
+    private void startGeofence(Double lat, Double lng) {
         Log.i(TAG, "startGeofence()");
-        LatLng missoulaCoords = new LatLng(46.8686846, -114.009869);
+        System.out.println("LAT LNG INSIDE START GEOFENCE: " + lat + " " + lng);
+        LatLng coords = new LatLng(lat, lng);
+        System.out.println("COORDS INSIDE START GEOFENCE: " + coords);
         if( true ) {
-            Geofence geofence = createGeofence( missoulaCoords, GEOFENCE_RADIUS );
+            Geofence geofence = createGeofence( coords, GEOFENCE_RADIUS );
             GeofencingRequest geofenceRequest = createGeofenceRequest( geofence );
+            System.out.println("geofence INSICE START GEOFENCE: " + geofence);
             addGeofence( geofenceRequest );
         } else {
             Log.e(TAG, "Geofence marker is null");
