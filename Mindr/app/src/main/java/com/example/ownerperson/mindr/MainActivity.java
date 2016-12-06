@@ -33,6 +33,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.plus.model.people.Person;
 
 import java.util.List;
 
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements
         createGoogleApi();
 
         context = this;
+        int listID = 1;
 
         try {
             AsyncTask task = new HttpGetStringList().execute(MainActivity.baseURL + "api/listPrefs");
@@ -82,6 +84,17 @@ public class MainActivity extends AppCompatActivity implements
             final LinearLayout buttons = (LinearLayout) findViewById(R.id.list_buttons);
             for (String activity : activities) {
                 final AppCompatActivity self = this;
+
+                //Create new linear layout (creates line break)
+                final LinearLayout listLayout = new LinearLayout(this);
+                buttons.addView(listLayout);
+                listLayout.setOrientation(LinearLayout.HORIZONTAL);
+                listLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                listLayout.setId(listID++);
+
+                //Create list button
                 final Button listButton = new Button(this);
                 final String listName = activity;
                 listButton.setText(activity);
@@ -89,19 +102,21 @@ public class MainActivity extends AppCompatActivity implements
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
 
+
+                //Create delete button
                 final Button deleteButton = new Button(this);
                 deleteButton.setLayoutParams(new Toolbar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                deleteButton.setText("X");
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+                deleteButton.setText("DELETE");
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         try {
 
                             AsyncTask task = new HttpDeleteRequest().execute(MainActivity.baseURL + "api/delete", listName, "list");
                             task.get();
-                            buttons.removeView(deleteButton);
-                            buttons.removeView(listButton);
+                            listLayout.removeView(deleteButton);
+                            listLayout.removeView(listButton);
                         } catch (Exception e) {
                             System.out.println(e.toString());
                             e.printStackTrace();
@@ -120,8 +135,8 @@ public class MainActivity extends AppCompatActivity implements
 
                 });
 
-                buttons.addView(listButton);
-                buttons.addView(deleteButton);
+                listLayout.addView(listButton);
+                listLayout.addView(deleteButton);
             }
         } catch (Exception e) {
             System.out.println(e.toString());
