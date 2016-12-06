@@ -45,14 +45,12 @@ public class HttpDeleteRequest extends AsyncTask<String,Void, List<String>> {
         OkHttpClient client = new OkHttpClient();
         // Create request for remote resource.
         RequestBody body = RequestBody.create(JSON, reqJson.toString());
-        System.out.println("body!" + body);
         Request request = new Request.Builder()
                 .url(args[0])
                 .delete(body)
                 .build();
         try {
             Response response = client.newCall(request).execute();
-            System.out.println("deleted!");
 
             ResponseBody respBody = response.body();
             respBody.close();
