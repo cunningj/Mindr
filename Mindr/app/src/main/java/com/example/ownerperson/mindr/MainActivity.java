@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements
     private static final String NOTIFICATION_MSG = "NOTIFICATION MSG!!!";
     // Create a Intent send by the notification
     public static Intent makeNotificationIntent(Context context, String msg) {
+        System.out.println("INSTIDE MAKE NOTIFICATION INTENT LINE 60!!!");
         Intent intent = new Intent( context, MainActivity.class );
         intent.putExtra( NOTIFICATION_MSG, msg );
         return intent;
@@ -285,8 +286,7 @@ public class MainActivity extends AppCompatActivity implements
                 .setRequestId(GEOFENCE_REQ_ID)
                 .setCircularRegion( latLng.latitude, latLng.longitude, radius)
                 .setExpirationDuration( GEO_DURATION )
-                .setTransitionTypes( Geofence.GEOFENCE_TRANSITION_ENTER
-                        | Geofence.GEOFENCE_TRANSITION_EXIT )
+                .setTransitionTypes( Geofence.GEOFENCE_TRANSITION_ENTER)
                 .build();
     }
 
@@ -302,11 +302,11 @@ public class MainActivity extends AppCompatActivity implements
     private PendingIntent geoFencePendingIntent;
     private final int GEOFENCE_REQ_CODE = 0;
     private PendingIntent createGeofencePendingIntent() {
-        Log.d(TAG, "createGeofencePendingIntent");
+        Log.d(TAG, "createGeofencePendingIntent!!!");
         if ( geoFencePendingIntent != null )
             return geoFencePendingIntent;
 
-        Intent intent = new Intent( this, GeofenceTransitionService.class);
+        Intent intent = new Intent( this , GeofenceTransitionService.class);
         return PendingIntent.getService(
                 this, GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT );
     }

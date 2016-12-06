@@ -28,6 +28,7 @@ public class GeofenceTransitionService extends IntentService {
 
     public GeofenceTransitionService() {
         super(TAG);
+        System.out.println("inside GeofenceTransitionService()");
     }
 
 
@@ -40,6 +41,8 @@ public class GeofenceTransitionService extends IntentService {
 
         // Handling errors
         if ( geofencingEvent.hasError() ) {
+            System.out.println("inside geofencingevent has error()");
+
             String errorMsg = getErrorString(geofencingEvent.getErrorCode() );
             Log.e( TAG, errorMsg );
             return;
@@ -50,6 +53,9 @@ public class GeofenceTransitionService extends IntentService {
         // Check if the transition type
         if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT ) {
+
+            System.out.println("inside geofenceTransition is enter or exit()");
+
             // Get the geofence that were triggered
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
             // Create a detail message with Geofences received
@@ -61,6 +67,7 @@ public class GeofenceTransitionService extends IntentService {
 
     // Create a detail message with Geofences received
     private String getGeofenceTransitionDetails(int geoFenceTransition, List<Geofence> triggeringGeofences) {
+        System.out.println("inside getGeofenceTransitionDetails()");
         // get the ID of each geofence triggered
         ArrayList<String> triggeringGeofencesList = new ArrayList<>();
         System.out.println("triggeringGeofencesList inside get details, " + triggeringGeofencesList);
@@ -104,9 +111,10 @@ public class GeofenceTransitionService extends IntentService {
 
     // Create a notification
     private Notification createNotification(String msg, PendingIntent notificationPendingIntent) {
+        System.out.println("inside createNotification");
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder
-                //.setSmallIcon(R.drawable.ic_action_location)
+                .setSmallIcon(R.drawable.ic_action_location)
                 .setColor(Color.RED)
                 .setContentTitle(msg)
                 .setContentText("Geofence Notification!")

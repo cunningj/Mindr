@@ -17,6 +17,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <service android:name=".GeofenceTransitionService" />
+
+
         <activity android:name=".MainActivity">
 
             <intent-filter>
