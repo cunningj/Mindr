@@ -39,6 +39,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.google.android.gms.location.Geofence.NEVER_EXPIRE;
+
 
 public class AddListActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -139,13 +141,14 @@ public class AddListActivity extends AppCompatActivity implements
 
 
 
-    private static final long GEO_DURATION = 60 * 60 * 1000;
+    private static final long GEO_DURATION = NEVER_EXPIRE;
     private static final String GEOFENCE_REQ_ID = "My Geofence";
     private static final float GEOFENCE_RADIUS = 16000.0f; // in meters
 
     // Create a Geofence
     private Geofence createGeofence(LatLng latLng, float radius ) {
         Log.d(TAG, "createGeofence");
+        System.out.println("INSIDE CREATE GEOFENCE. LATLNG AND RADIUS: " + latLng + " " + radius);
         return new Geofence.Builder()
                 .setRequestId(GEOFENCE_REQ_ID)
                 .setCircularRegion( latLng.latitude, latLng.longitude, radius)

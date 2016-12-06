@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
+    //ADDED BASED ON CODE EXAMPLE
+    private final int REQ_PERMISSION = 999;
     Context context;
 
     public static final String baseURL = "http://10.0.2.2:3000/";
@@ -172,32 +174,6 @@ public class MainActivity extends AppCompatActivity implements
         Log.w(TAG, "onConnectionFailed()");
     }
 
-    private Location lastLocation;
-    //...
-
-
-    // Get last known location
-    private void getLastKnownLocation() {
-        Log.d(TAG, "getLastKnownLocation()");
-        if ( checkPermission() ) {
-            lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-            if ( lastLocation != null ) {
-                Log.i(TAG, "LasKnown location. " +
-                        "Long: " + lastLocation.getLongitude() +
-                        " | Lat: " + lastLocation.getLatitude());
-                writeLastLocation();
-                startLocationUpdates();
-            } else {
-                Log.w(TAG, "No location retrieved yet");
-                startLocationUpdates();
-            }
-        }
-        else askPermission();
-    }
-
-    //ADDED BASED ON CODE EXAMPLE
-    private final int REQ_PERMISSION = 999;
-
     // Check for permission to access Location
     private boolean checkPermission() {
         Log.d(TAG, "checkPermission()");
@@ -243,6 +219,34 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+
+
+
+
+
+
+    private Location lastLocation;
+
+    // Get last known location
+    private void getLastKnownLocation() {
+        Log.d(TAG, "getLastKnownLocation()");
+        if ( checkPermission() ) {
+            lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            if ( lastLocation != null ) {
+                Log.i(TAG, "LasKnown location. " +
+                        "Long: " + lastLocation.getLongitude() +
+                        " | Lat: " + lastLocation.getLatitude());
+                writeLastLocation();
+                startLocationUpdates();
+            } else {
+                Log.w(TAG, "No location retrieved yet");
+                startLocationUpdates();
+            }
+        }
+        else askPermission();
+    }
+
+
     private LocationRequest locationRequest;
     // Defined in mili seconds.
     // This number in extremely low, and should be used only for debug
@@ -257,8 +261,13 @@ public class MainActivity extends AppCompatActivity implements
                 .setInterval(UPDATE_INTERVAL)
                 .setFastestInterval(FASTEST_INTERVAL);
 
-        if ( checkPermission() )
+        System.out.println("here is location request ln 264 " + locationRequest);
+
+        if ( checkPermission() ) {
+            System.out.println("inside checkpermission startlocationupdates if statement ln 267 ");
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+
+        }
     }
 
     @Override
@@ -266,6 +275,7 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG, "onLocationChanged ["+location+"]");
         lastLocation = location;
         writeActualLocation(location);
+        startLocationUpdates();
     }
 
     // Write location coordinates on UI
@@ -278,6 +288,31 @@ public class MainActivity extends AppCompatActivity implements
         writeActualLocation(lastLocation);
     }
 
+
+//    private PendingIntent geoFencePendingIntent;
+//    private final int GEOFENCE_REQ_CODE = 0;
+//    private PendingIntent createGeofencePendingIntent() {
+//        Log.d(TAG, "createGeofencePendingIntent");
+//        if ( geoFencePendingIntent != null )
+//            return geoFencePendingIntent;
+//
+//        System.out.println("before setting intent to go to GeofenceTransitionService.class");
+//        Intent intent = new Intent( this, GeofenceTransitionService.class);
+//        System.out.println("after setting intent to go to GeofenceTransitionService.class");
+//        return PendingIntent.getService(
+//                this, GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT );
+//    }
+//
+//    // Add the created GeofenceRequest to the device's monitoring list
+//    private void addGeofence(GeofencingRequest request) {
+//        Log.d(TAG, "addGeofence");
+//        if (checkPermission())
+//            LocationServices.GeofencingApi.addGeofences(
+//                    googleApiClient,
+//                    request,
+//                    createGeofencePendingIntent()
+//            ).setResultCallback(this);
+//    }
 
 
 
