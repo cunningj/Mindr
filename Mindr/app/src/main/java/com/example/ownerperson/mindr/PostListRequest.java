@@ -40,7 +40,7 @@ public class PostListRequest extends AsyncTask<String, Void, List<String>> {
         reqData.put("approaching", args[2]);
         int arraySize = args.length;
 
-        for (int i = 4; i < arraySize; i++) {
+        for (int i = 3; i < arraySize; i++) {
             reqData.put("item" + i, args[i]);
         }
 

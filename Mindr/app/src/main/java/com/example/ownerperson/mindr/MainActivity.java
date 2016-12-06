@@ -79,47 +79,47 @@ public class MainActivity extends AppCompatActivity implements
             List<String> activities = (List<String>) task.get();
             final LinearLayout buttons = (LinearLayout) findViewById(R.id.list_buttons);
             for (String activity : activities) {
-                    final AppCompatActivity self = this;
-                    final Button listButton = new Button(this);
-                    final String listName = activity;
-                    listButton.setText(activity);
-                    listButton.setLayoutParams(new Toolbar.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-
-                    final Button deleteButton = new Button(this);
-                    deleteButton.setLayoutParams(new Toolbar.LayoutParams(
+                final AppCompatActivity self = this;
+                final Button listButton = new Button(this);
+                final String listName = activity;
+                listButton.setText(activity);
+                listButton.setLayoutParams(new Toolbar.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
-                    deleteButton.setText("X");
-                    deleteButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            try {
 
-                                AsyncTask task = new HttpDeleteRequest().execute(MainActivity.baseURL + "api/delete", listName, "list");
-                                task.get();
-                                buttons.removeView(deleteButton);
-                                buttons.removeView(listButton);
-                            } catch (Exception e) {
-                                System.out.println(e.toString());
-                                e.printStackTrace();
-                            }
+                final Button deleteButton = new Button(this);
+                deleteButton.setLayoutParams(new Toolbar.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                deleteButton.setText("X");
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        try {
+
+                            AsyncTask task = new HttpDeleteRequest().execute(MainActivity.baseURL + "api/delete", listName, "list");
+                            task.get();
+                            buttons.removeView(deleteButton);
+                            buttons.removeView(listButton);
+                        } catch (Exception e) {
+                            System.out.println(e.toString());
+                            e.printStackTrace();
                         }
-                    });
+                    }
+                });
 
-                    final String buttonName = activity;
-                    listButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
+                final String buttonName = activity;
+                listButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
 
-                            Intent viewListItems = new Intent(self, ViewListItems.class);
-                            viewListItems.putExtra("listName", buttonName);
-                            startActivity(viewListItems);
-                        }
+                        Intent viewListItems = new Intent(self, ViewListItems.class);
+                        viewListItems.putExtra("listName", buttonName);
+                        startActivity(viewListItems);
+                    }
 
-                    });
+                });
 
-                    buttons.addView(listButton);
-                    buttons.addView(deleteButton);
+                buttons.addView(listButton);
+                buttons.addView(deleteButton);
             }
         } catch (Exception e) {
             System.out.println(e.toString());
