@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
@@ -22,18 +23,22 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 
-public class PostListRequest extends AsyncTask<String, Void, List<String>> {
+public class PostListRequest extends AsyncTask<String, Void, PostListRequest.LatLngResponse> {
+    private static final Moshi MOSHI = new Moshi.Builder().build();
+    private static final JsonAdapter<LatLngResponse> LATLNG_RESPONSE_JSON_ADAPTER = MOSHI.adapter(PostListRequest.LatLngResponse.class);
 
-    Context context;
+    public static class LatLngResponse{
+        public double latitude;
+        public double longitude;
+    }
 
     private static final String ADD_LIST_ENDPOINT = MainActivity.baseURL + "api/addList";
 
-    private static final Moshi MOSHI = new Moshi.Builder().build();
 
     public static final MediaType JSON
             = MediaType.parse("application/json; charset=utf-8");
 
-    protected List<String> doInBackground(String... args) {
+    protected LatLngResponse doInBackground(String... args) {
         Map<String, String> reqData = new HashMap<String, String>();
         reqData.put("listName", args[0]);
         reqData.put("locationName", args[1]);
@@ -59,7 +64,11 @@ public class PostListRequest extends AsyncTask<String, Void, List<String>> {
             System.out.println("boo yaaaaaa");
 
             ResponseBody respBody = response.body();
+
+            LatLngResponse latLngResponse = LATLNG_RESPONSE_JSON_ADAPTER.fromJson(respBody.source());
             respBody.close();
+            System.out.println("latLngResponse" + latLngResponse);
+            return latLngResponse;
 
         } catch (Exception e){
             System.out.println("Could not make http request : " + e.toString());

@@ -353,6 +353,9 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+//    Bundle extras = getIntent().getExtras();
+//    final String latLngExtras = extras.getString("LatLng");
+
     // Start Geofence creation process
     private void startGeofence() {
         Log.i(TAG, "startGeofence()");
