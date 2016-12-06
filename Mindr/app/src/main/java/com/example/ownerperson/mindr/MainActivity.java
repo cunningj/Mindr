@@ -44,22 +44,15 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-    //ADDED BASED ON CODE EXAMPLE
+    private GoogleApiClient googleApiClient;
+    private Location lastLocation;
+    private static final String TAG = MainActivity.class.getSimpleName();
     private final int REQ_PERMISSION = 999;
+
     Context context;
 
     public static final String baseURL = "http://10.0.2.2:3000/";
 
-    private GoogleApiClient googleApiClient;
-    private static final String TAG = MainActivity.class.getSimpleName();
-
-    private static final String NOTIFICATION_MSG = "NOTIFICATION MSG";
-    // Create a Intent send by the notification
-    public static Intent makeNotificationIntent(Context context, String msg) {
-        Intent intent = new Intent( context, MainActivity.class );
-        intent.putExtra( NOTIFICATION_MSG, msg );
-        return intent;
-    }
 
 
     @Override
@@ -174,11 +167,66 @@ public class MainActivity extends AppCompatActivity implements
         Log.w(TAG, "onConnectionFailed()");
     }
 
+
+    // Get last known location
+    private void getLastKnownLocation() {
+        Log.d(TAG, "getLastKnownLocation()");
+        if ( checkPermission() ) {
+            lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+            if ( lastLocation != null ) {
+                Log.i(TAG, "LasKnown location. " +
+                        "Long: " + lastLocation.getLongitude() +
+                        " | Lat: " + lastLocation.getLatitude());
+                writeLastLocation();
+                startLocationUpdates();
+            } else {
+                Log.w(TAG, "No location retrieved yet");
+                startLocationUpdates();
+            }
+        }
+        else askPermission();
+    }
+
+    private LocationRequest locationRequest;
+    // Defined in mili seconds.
+    // This number in extremely low, and should be used only for debug
+    private final int UPDATE_INTERVAL =  1000;
+    private final int FASTEST_INTERVAL = 900;
+
+    // Start location Updates
+    private void startLocationUpdates(){
+        Log.i(TAG, "startLocationUpdates()");
+        locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(UPDATE_INTERVAL)
+                .setFastestInterval(FASTEST_INTERVAL);
+
+        if ( checkPermission() )
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.d(TAG, "onLocationChanged ["+location+"]");
+        lastLocation = location;
+        writeActualLocation(location);
+    }
+
+    // Write location coordinates on UI
+    private void writeActualLocation(Location location) {
+        System.out.println( "Lat: " + location.getLatitude() );
+        System.out.println( "Long: " + location.getLongitude() );
+    }
+
+    private void writeLastLocation() {
+        writeActualLocation(lastLocation);
+    }
+
     // Check for permission to access Location
     private boolean checkPermission() {
         Log.d(TAG, "checkPermission()");
         // Ask for permission if it wasn't granted yet
-        return (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+        return (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED );
     }
 
@@ -187,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG, "askPermission()");
         ActivityCompat.requestPermissions(
                 this,
-                new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION },
+                new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
                 REQ_PERMISSION
         );
     }
@@ -217,103 +265,6 @@ public class MainActivity extends AppCompatActivity implements
     private void permissionsDenied() {
         Log.w(TAG, "permissionsDenied()");
     }
-
-
-
-
-
-
-
-
-    private Location lastLocation;
-
-    // Get last known location
-    private void getLastKnownLocation() {
-        Log.d(TAG, "getLastKnownLocation()");
-        if ( checkPermission() ) {
-            lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-            if ( lastLocation != null ) {
-                Log.i(TAG, "LasKnown location. " +
-                        "Long: " + lastLocation.getLongitude() +
-                        " | Lat: " + lastLocation.getLatitude());
-                writeLastLocation();
-                startLocationUpdates();
-            } else {
-                Log.w(TAG, "No location retrieved yet");
-                startLocationUpdates();
-            }
-        }
-        else askPermission();
-    }
-
-
-    private LocationRequest locationRequest;
-    // Defined in mili seconds.
-    // This number in extremely low, and should be used only for debug
-    private final int UPDATE_INTERVAL =  1000;
-    private final int FASTEST_INTERVAL = 900;
-
-    // Start location Updates
-    private void startLocationUpdates(){
-        Log.i(TAG, "startLocationUpdates()");
-        locationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(UPDATE_INTERVAL)
-                .setFastestInterval(FASTEST_INTERVAL);
-
-        System.out.println("here is location request ln 264 " + locationRequest);
-
-        if ( checkPermission() ) {
-            System.out.println("inside checkpermission startlocationupdates if statement ln 267 ");
-            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-
-        }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        Log.d(TAG, "onLocationChanged ["+location+"]");
-        lastLocation = location;
-        writeActualLocation(location);
-        startLocationUpdates();
-    }
-
-    // Write location coordinates on UI
-    private void writeActualLocation(Location location) {
-        System.out.println( "Lat: " + location.getLatitude() );
-        System.out.println( "Long: " + location.getLongitude() );
-    }
-
-    private void writeLastLocation() {
-        writeActualLocation(lastLocation);
-    }
-
-
-//    private PendingIntent geoFencePendingIntent;
-//    private final int GEOFENCE_REQ_CODE = 0;
-//    private PendingIntent createGeofencePendingIntent() {
-//        Log.d(TAG, "createGeofencePendingIntent");
-//        if ( geoFencePendingIntent != null )
-//            return geoFencePendingIntent;
-//
-//        System.out.println("before setting intent to go to GeofenceTransitionService.class");
-//        Intent intent = new Intent( this, GeofenceTransitionService.class);
-//        System.out.println("after setting intent to go to GeofenceTransitionService.class");
-//        return PendingIntent.getService(
-//                this, GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT );
-//    }
-//
-//    // Add the created GeofenceRequest to the device's monitoring list
-//    private void addGeofence(GeofencingRequest request) {
-//        Log.d(TAG, "addGeofence");
-//        if (checkPermission())
-//            LocationServices.GeofencingApi.addGeofences(
-//                    googleApiClient,
-//                    request,
-//                    createGeofencePendingIntent()
-//            ).setResultCallback(this);
-//    }
-
 
 
 
