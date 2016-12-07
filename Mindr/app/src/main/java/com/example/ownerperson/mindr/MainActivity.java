@@ -312,17 +312,33 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final long GEO_DURATION = 60 * 60 * 1000;
     private static final String GEOFENCE_REQ_ID = "My Geofence";
-    private static final float GEOFENCE_RADIUS = 1600.0f; // in meters
+    //private static final float GEOFENCE_RADIUS = 1600.0f; // in meters
 
     // Create a Geofence
-    private Geofence createGeofence( LatLng latLng, float radius ) {
+    private Geofence createGeofence( LatLng latLng ) {
         Log.d(TAG, "createGeofence");
-        return new Geofence.Builder()
-                .setRequestId(GEOFENCE_REQ_ID)
-                .setCircularRegion( latLng.latitude, latLng.longitude, radius)
-                .setExpirationDuration( GEO_DURATION )
-                .setTransitionTypes( Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build();
+
+        Bundle extras = getIntent().getExtras();
+
+        final int approachingExtra = extras.getInt("Approaching");
+        System.out.println("APPROACHING EXTRA WHEN CREATED " + approachingExtra);
+
+        if(approachingExtra == 1) {
+            System.out.println("APPROACHING EXTRA INSIDE IF: " + approachingExtra);
+            return new Geofence.Builder()
+                    .setRequestId(GEOFENCE_REQ_ID)
+                    .setCircularRegion(latLng.latitude, latLng.longitude, 10000.0f)
+                    .setExpirationDuration(GEO_DURATION)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                    .build();
+        } else {
+            return new Geofence.Builder()
+                    .setRequestId(GEOFENCE_REQ_ID)
+                    .setCircularRegion(latLng.latitude, latLng.longitude, 1000.0f)
+                    .setExpirationDuration(GEO_DURATION)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_EXIT)
+                    .build();
+        }
     }
 
     // Create a Geofence Request
@@ -375,7 +391,7 @@ public class MainActivity extends AppCompatActivity implements
         LatLng coords = new LatLng(lat, lng);
         System.out.println("COORDS INSIDE START GEOFENCE: " + coords);
         if( true ) {
-            Geofence geofence = createGeofence( coords, GEOFENCE_RADIUS );
+            Geofence geofence = createGeofence( coords );
             GeofencingRequest geofenceRequest = createGeofenceRequest( geofence );
             System.out.println("geofence INSICE START GEOFENCE: " + geofence);
             addGeofence( geofenceRequest );
