@@ -81,9 +81,16 @@ public class AddListActivity extends AppCompatActivity {
 
     }
 
-
+    int resetValue = 1;
     public void addListItem(View view){
         LinearLayout itemTextBoxes = (LinearLayout) findViewById(R.id.add_list_layout);
+        if(resetValue == 1) {
+            TextView listTitle = new TextView(this);
+            listTitle.setText("List Items:");
+            listTitle.setTextSize(20);
+            itemTextBoxes.addView(listTitle);
+            resetValue++;
+        }
         previousItem = (EditText) findViewById(R.id.list_item);
         System.out.println("This is previous item " + previousItem);
         previousText = previousItem.getText().toString();
@@ -95,6 +102,7 @@ public class AddListActivity extends AppCompatActivity {
 
         TextView textBox = new TextView(this);
         textBox.setText(previousText);
+        textBox.setTextSize(15);
         itemTextBoxes.addView(textBox);
         previousItem.setText("");
 

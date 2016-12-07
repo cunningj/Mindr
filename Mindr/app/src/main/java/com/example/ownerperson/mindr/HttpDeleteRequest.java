@@ -37,7 +37,7 @@ public class HttpDeleteRequest extends AsyncTask<String,Void, List<String>> {
             reqData.put("listName", args[3]);
         } else if (args[2] == "list"){
             reqData.put("list", args[1]);
-            System.out.println("We are in the list else if " + args[2]);
+            System.out.println("We are deleting a list with the name of " + args[1]);
         }
 
         JSONObject reqJson = new JSONObject(reqData);
