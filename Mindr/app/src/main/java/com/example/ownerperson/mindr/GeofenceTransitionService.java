@@ -81,9 +81,9 @@ public class GeofenceTransitionService extends IntentService {
         String status = null;
         if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ) {
             System.out.println("GEOFENCE_TRANSITION_ENTER");
-            status = "Entering ";
+            status = "You are approaching, check list: ";
         } else if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT )
-            status = "Exiting ";
+            status = "You are leaving, check list: ";
         return status + TextUtils.join( ", ", triggeringGeofencesList);
 
     }
@@ -99,10 +99,15 @@ public class GeofenceTransitionService extends IntentService {
                 getApplicationContext(), msg
         );
 
+        Intent showListItems = new Intent (this, ViewListItems.class);
+
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(notificationIntent);
+//        stackBuilder.addNextIntent(showListItems);
         PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent showListItemsPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
 
         // Creating and sending Notification
         NotificationManager notificatioMng =
@@ -110,6 +115,7 @@ public class GeofenceTransitionService extends IntentService {
         notificatioMng.notify(
                 GEOFENCE_NOTIFICATION_ID,
                 createNotification(msg, notificationPendingIntent));
+
     }
 
     // Create a notification

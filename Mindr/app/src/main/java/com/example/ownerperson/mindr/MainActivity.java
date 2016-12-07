@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.google.android.gms.location.Geofence.NEVER_EXPIRE;
 import static java.security.AccessController.getContext;
 
 
@@ -204,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements
         getLastKnownLocation();
 
         Bundle extras = getIntent().getExtras();
-        if(extras != null) {
+        if(extras != null && extras.getDouble("Latitude") != 0.0) {
             final Double latitudeExtra = extras.getDouble("Latitude");
             final Double longitudeExtra = extras.getDouble("Longitude");
             final int approachingExtra = extras.getInt("Approaching");
@@ -327,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements
         Log.w(TAG, "permissionsDenied()");
     }
 
-    private static final long GEO_DURATION = 60 * 60 * 1000;
+    private static final long GEO_DURATION = NEVER_EXPIRE;
     //private static final String GEOFENCE_REQ_ID;
     //private static final float GEOFENCE_RADIUS = 1600.0f; // in meters
 
