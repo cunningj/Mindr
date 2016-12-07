@@ -85,6 +85,7 @@ public class GeofenceTransitionService extends IntentService {
         } else if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT )
             status = "Exiting ";
         return status + TextUtils.join( ", ", triggeringGeofencesList);
+
     }
 
     // Send a notification

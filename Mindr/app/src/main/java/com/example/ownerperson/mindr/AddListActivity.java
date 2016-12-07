@@ -149,6 +149,7 @@ public class AddListActivity extends AppCompatActivity {
             sendCoordsToGeofence.putExtra("Latitude", resp.latitude);
             sendCoordsToGeofence.putExtra("Longitude", resp.longitude);
             sendCoordsToGeofence.putExtra("Approaching", resp.approaching);
+            sendCoordsToGeofence.putExtra("ListName", listNameText);
             startActivity(sendCoordsToGeofence);
 
         } catch(Exception e){

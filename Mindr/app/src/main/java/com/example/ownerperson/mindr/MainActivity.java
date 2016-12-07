@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements
     private Location lastLocation;
     private static final String TAG = MainActivity.class.getSimpleName();
     private final int REQ_PERMISSION = 999;
+
 
     //protected ArrayList<Geofence> mGeofenceList;
 
@@ -131,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements
                             task.get();
                             listLayout.removeView(deleteButton);
                             listLayout.removeView(listButton);
+                            deleteGeofences(listName);
                         } catch (Exception e) {
                             System.out.println(e.toString());
                             e.printStackTrace();
@@ -325,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private static final long GEO_DURATION = 60 * 60 * 1000;
-    private static final String GEOFENCE_REQ_ID = UUID.randomUUID().toString();
+    //private static final String GEOFENCE_REQ_ID;
     //private static final float GEOFENCE_RADIUS = 1600.0f; // in meters
 
     // Create a Geofence
@@ -333,6 +336,9 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG, "createGeofence");
 
         Bundle extras = getIntent().getExtras();
+
+        final String GEOFENCE_REQ_ID = extras.getString("ListName");
+        System.out.println("GEOFENCE REQ ID !!!!" + GEOFENCE_REQ_ID);
 
         final int approachingExtra = extras.getInt("Approaching");
         System.out.println("APPROACHING EXTRA WHEN CREATED " + approachingExtra);
@@ -412,6 +418,28 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             Log.e(TAG, "Geofence marker is null");
         }
+    }
+
+
+
+    private void deleteGeofences(String listNameID) {
+        ArrayList<String> geofenceIDs = new ArrayList<String>();
+        Log.d(TAG, "addGeofence");
+        if (checkPermission())
+            geofenceIDs.add(listNameID);
+            LocationServices.GeofencingApi.removeGeofences(
+                    googleApiClient,
+                    geofenceIDs
+            ).setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(@NonNull Status status) {
+                    if (status.isSuccess()) {
+                        System.out.println("GEOFENCE DELETED");
+                    }
+                }
+
+            });
+
     }
 
 
