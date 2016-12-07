@@ -37,7 +37,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.plus.model.people.Person;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static java.security.AccessController.getContext;
 
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements
     private Location lastLocation;
     private static final String TAG = MainActivity.class.getSimpleName();
     private final int REQ_PERMISSION = 999;
+
+    //protected ArrayList<Geofence> mGeofenceList;
 
     Context context;
 
@@ -78,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements
         getSupportActionBar().setIcon(R.drawable.logo);
 
         createGoogleApi();
+
+        //mGeofenceList = new ArrayList<Geofence>(mGeofenceList);
 
         context = this;
         int listID = 1;
@@ -319,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private static final long GEO_DURATION = 60 * 60 * 1000;
-    private static final String GEOFENCE_REQ_ID = "My Geofence";
+    private static final String GEOFENCE_REQ_ID = UUID.randomUUID().toString();
     //private static final float GEOFENCE_RADIUS = 1600.0f; // in meters
 
     // Create a Geofence

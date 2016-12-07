@@ -58,6 +58,7 @@ public class GeofenceTransitionService extends IntentService {
 
             // Get the geofence that were triggered
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+            System.out.println("INSIDE ON HANDLE INTENT, TRIGGERING GEO: " + triggeringGeofences);
             // Create a detail message with Geofences received
             String geofenceTransitionDetails = getGeofenceTransitionDetails(geoFenceTransition, triggeringGeofences );
             // Send notification details as a String
@@ -74,6 +75,7 @@ public class GeofenceTransitionService extends IntentService {
 
         for ( Geofence geofence : triggeringGeofences ) {
             triggeringGeofencesList.add( geofence.getRequestId() );
+            System.out.println("INSIDE GEO TRANSITION DETAILS, TRIGGERING GEOFENCES ID: " + triggeringGeofencesList);
         }
 
         String status = null;
