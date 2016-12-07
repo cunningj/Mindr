@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
@@ -25,6 +27,7 @@ public class GeofenceTransitionService extends IntentService {
 
     private static final String TAG = GeofenceTransitionService.class.getSimpleName();
     public static final int GEOFENCE_NOTIFICATION_ID = 0;
+
 
     public GeofenceTransitionService() {
         super(TAG);
@@ -65,7 +68,8 @@ public class GeofenceTransitionService extends IntentService {
             sendNotification( geofenceTransitionDetails );
         }
     }
-
+    public String listIDName;
+    public List<String> arrayItems;
     // Create a detail message with Geofences received
     private String getGeofenceTransitionDetails(int geoFenceTransition, List<Geofence> triggeringGeofences) {
         System.out.println("inside getGeofenceTransitionDetails()");
@@ -78,15 +82,35 @@ public class GeofenceTransitionService extends IntentService {
             System.out.println("INSIDE GEO TRANSITION DETAILS, TRIGGERING GEOFENCES ID: " + triggeringGeofencesList);
         }
 
+        listIDName = TextUtils.join("", triggeringGeofencesList);
+
+
+//        getInformation();
+        System.out.println("RIGHT AFTER GET INFORMATION");
+
         String status = null;
         if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ) {
             System.out.println("GEOFENCE_TRANSITION_ENTER");
-            status = "You are approaching, check list: ";
+            status = "Approaching Mindr Location, check list: ";
         } else if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT )
-            status = "You are leaving, check list: ";
-        return status + TextUtils.join( ", ", triggeringGeofencesList);
+            status = "Leaving Mindr Location, check list: ";
+
+        return status;
 
     }
+
+//    public void getInformation(){
+//        System.out.println("We are in getInformation");
+//        try {
+//            AsyncTask task = new GetListItemsRequest().execute(listIDName);
+//            List<String> arrayItems = (List<String>) task.get();
+//            System.out.println("listItems" + arrayItems);
+//
+//        } catch (Exception e) {
+//            System.out.println(e.toString());
+//            e.printStackTrace();
+//        }
+//    }
 
     // Send a notification
     private void sendNotification( String msg ) {
@@ -126,7 +150,7 @@ public class GeofenceTransitionService extends IntentService {
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setColor(Color.RED)
                 .setContentTitle(msg)
-                .setContentText("Geofence Notification!")
+                .setContentText(listIDName)
                 .setContentIntent(notificationPendingIntent)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
                 .setAutoCancel(true);
