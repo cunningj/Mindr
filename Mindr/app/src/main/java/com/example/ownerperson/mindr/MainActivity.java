@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.plus.model.people.Person;
 
 import java.util.List;
+
+import static java.security.AccessController.getContext;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -97,18 +101,22 @@ public class MainActivity extends AppCompatActivity implements
                 //Create list button
                 final Button listButton = new Button(this);
                 final String listName = activity;
+                listButton.setGravity(Gravity.CENTER_VERTICAL|Gravity.LEFT);
                 listButton.setText(activity);
+                int listWidth = 750;
                 listButton.setLayoutParams(new Toolbar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        listWidth,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
-
 
                 //Create delete button
                 final Button deleteButton = new Button(this);
+                int deleteWidth = 130;
                 deleteButton.setLayoutParams(new Toolbar.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
-                deleteButton.setText("DELETE");
+                        deleteWidth,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                int img = R.drawable.delete_icon;
+                deleteButton.setCompoundDrawablesWithIntrinsicBounds(img,0,0,0);
+//                deleteButton.setBackgroundColor(getResources().getColor(R.color.Red));
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         try {
