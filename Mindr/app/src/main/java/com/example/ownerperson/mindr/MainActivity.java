@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
     // Get last known location
-    private void getLastKnownLocation() {
+    public void getLastKnownLocation() {
         Log.d(TAG, "getLastKnownLocation()");
         if ( checkPermission() ) {
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
@@ -274,8 +274,14 @@ public class MainActivity extends AppCompatActivity implements
         writeActualLocation(location);
     }
 
+    double currentLatitude;
+    double currentLongitude;
+
     // Write location coordinates on UI
     private void writeActualLocation(Location location) {
+        currentLatitude = location.getLatitude();
+        currentLongitude = location.getLongitude();
+
         System.out.println( "Lat: " + location.getLatitude() );
         System.out.println( "Long: " + location.getLongitude() );
     }
@@ -446,7 +452,10 @@ public class MainActivity extends AppCompatActivity implements
 
 
     public void addLocationClick(View view) {
-        startActivity(new Intent(context, AddLocationActivity.class));
+        Intent sendCurrentCoordsToMap = new Intent(this, AddLocationActivity.class);
+        sendCurrentCoordsToMap.putExtra("currentLatitude", currentLatitude);
+        sendCurrentCoordsToMap.putExtra("currentLongitude", currentLongitude);
+        startActivity(sendCurrentCoordsToMap);
     }
 
     public void addListClick(View view) {
