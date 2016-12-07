@@ -215,6 +215,17 @@ public class MainActivity extends AppCompatActivity implements
             startGeofence(latitudeExtra, longitudeExtra);
         }
 
+
+        Bundle deleteExtras = getIntent().getExtras();
+        if (deleteExtras != null && deleteExtras.getString("DeletedListName") != null) {
+            deleteGeofences(deleteExtras.getString("DeletedListName"));
+            getIntent().removeExtra("DeletedListName");
+        }
+
+
+
+
+
     }
 
     // GoogleApiClient.ConnectionCallbacks suspended

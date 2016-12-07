@@ -105,9 +105,29 @@ public class ViewListItems extends AppCompatActivity {
             System.out.println(e.toString());
             e.printStackTrace();
         }
+        Intent deleteExtras = new Intent(this, MainActivity.class);
+        deleteExtras.putExtra("DeletedListName", name);
+        startActivity(deleteExtras);
+    }
+
+
+    public void addListItemOnViews (View view) {
+        context = this;
+        try {
+
+            AsyncTask task = new HttpDeleteRequest().execute(MainActivity.baseURL + "api/delete", name, "list");
+            task.get();
+
+
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            e.printStackTrace();
+        }
         System.out.println("We are back out of the delete");
         startActivity(new Intent(context, MainActivity.class));
     }
+
+
 
 
 
