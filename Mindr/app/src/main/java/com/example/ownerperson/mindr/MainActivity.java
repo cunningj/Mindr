@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements
                         ViewGroup.LayoutParams.WRAP_CONTENT));
                 int img = R.drawable.delete_icon;
                 deleteButton.setCompoundDrawablesWithIntrinsicBounds(img,0,0,0);
-//                deleteButton.setBackgroundColor(getResources().getColor(R.color.Red));
+//                deleteButton.setBackgroundColor(R.color.delete_red);
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         try {

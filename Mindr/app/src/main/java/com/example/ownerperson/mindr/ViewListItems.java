@@ -68,14 +68,17 @@ public class ViewListItems extends AppCompatActivity {
                         ViewGroup.LayoutParams.WRAP_CONTENT));
                 deleteItemButton.setCompoundDrawablesWithIntrinsicBounds(img,0,0,0);
 
+                itemLayout.addView(listButton);
+                itemLayout.addView(deleteItemButton);
+
                 deleteItemButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         try {
                             AsyncTask task = new HttpDeleteRequest().execute(MainActivity.baseURL + "api/delete", itemFinal, "item", name);
                             System.out.println("This is final: " + itemFinal);
                             task.get();
-                            buttons.removeView(deleteItemButton);
-                            buttons.removeView(listButton);
+                            itemLayout.removeView(deleteItemButton);
+                            itemLayout.removeView(listButton);
                         } catch (Exception e) {
                             System.out.println(e.toString());
                             e.printStackTrace();
@@ -83,8 +86,6 @@ public class ViewListItems extends AppCompatActivity {
                     }
                 });
 
-                itemLayout.addView(listButton);
-                itemLayout.addView(deleteItemButton);
             }
         } catch(Exception e){
             System.out.println(e.toString());

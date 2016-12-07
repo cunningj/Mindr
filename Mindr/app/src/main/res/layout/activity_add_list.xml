@@ -20,7 +20,8 @@
                 android:id="@+id/list_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="List Name"/>
+                android:hint="List Name"
+                android:textSize="25dp"/>
 
 
             <Switch
@@ -31,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:switchPadding="20dp"
+                android:textSize="15dp"
                 android:text="Turn off to create an exit list"
                 />
 
@@ -72,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="#ffffff"
-            android:background="#290"
+            android:background="#00cc66"
             android:text="ADD"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -86,13 +88,15 @@
         android:id="@+id/submitListButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:text="Submit"
+        android:text="SUBMIT LIST"
+        android:textSize="20dp"
+        android:onClick="submitListClick"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="10dp"
-        android:onClick="submitListClick"/>
+        android:background="#00cc66"
+        android:textColor="#fff"
+/>
 
 
 </RelativeLayout>
