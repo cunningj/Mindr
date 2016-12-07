@@ -21,30 +21,48 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <Button
-            android:id="@+id/add_list_page"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add New List"
-            android:onClick="addListClick"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="#666"
-            android:textColor="#fff"
-            android:layout_marginBottom="10dp"/>
+        <LinearLayout
+            android:id="@+id/top_button_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="116dp"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
 
-        <Button
-            android:id="@+id/map_page"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add New Location"
-            android:onClick="addLocationClick"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="#666"
-            android:textColor="#fff"
-            android:layout_marginBottom="30dp"/>
+            <Button
+                android:id="@+id/add_list_page"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:text="Add New &#10;List"
+                android:onClick="addListClick"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:gravity="bottom|center"
+                android:paddingBottom="10dp"
+                android:background="#5E2D79"
+                android:textColor="#fff"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="2"
+                android:paddingTop="7dp"
+                android:drawableTop="@drawable/wloc"/>
 
+            <Button
+                android:id="@+id/map_page"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:gravity="bottom|center"
+                android:paddingBottom="10dp"
+                android:text="Add New &#10;Location"
+                android:layout_marginLeft="20dp"
+                android:onClick="addLocationClick"
+                android:background="#B03060"
+                android:textColor="#fff"
+                android:layout_weight="2"
+                android:layout_marginBottom="10dp"
+                android:paddingTop="7dp"
+                android:drawableTop="@drawable/loc"/>
+
+
+        </LinearLayout>
 
         <TextView
             android:text="Lists"
