@@ -14,37 +14,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_above="@+id/delete_list">
+        android:id="@+id/text_view_layout_id"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="15dp"
+        >
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
             android:id="@+id/list_title"
             android:textSize="25dp"
             android:textColor="#000"
             android:gravity="center_horizontal"
             />
+    </LinearLayout>
 
 
         <ScrollView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:layout_below="@id/text_view_layout_id"
+            android:layout_above="@+id/delete_list">
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/list_item_names"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:paddingTop="30dp"
+                android:paddingTop="15dp"
                 android:paddingRight="16dp"
                 android:orientation="vertical"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true">
-
+                >
             </LinearLayout>
         </ScrollView>
-    </LinearLayout>
-
 
     <LinearLayout
         android:id="@id/delete_list"
@@ -54,7 +57,8 @@
         android:gravity="center"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp">
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -65,7 +69,5 @@
             android:textColor="#fff"
             android:layout_marginBottom="10dp"/>
     </LinearLayout>
-
-
 
 </RelativeLayout>
