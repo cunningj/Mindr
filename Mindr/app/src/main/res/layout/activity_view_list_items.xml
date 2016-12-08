@@ -13,7 +13,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_above="@+id/delete_list">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,19 +26,20 @@
 
 
         <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/list_item_names"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:paddingTop="40dp"
+                android:paddingTop="30dp"
                 android:paddingRight="16dp"
                 android:orientation="vertical"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true">
 
             </LinearLayout>
         </ScrollView>
@@ -45,25 +47,23 @@
 
 
     <LinearLayout
+        android:id="@id/delete_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:gravity="center"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true">
         <Button
-            android:id="@+id/delete_list"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="DELETE LIST"
             android:textSize="20dp"
             android:onClick="deleteListClick"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
             android:background="#FF6666"
             android:textColor="#fff"
-            android:layout_marginBottom="30dp"/>
+            android:layout_marginBottom="10dp"/>
     </LinearLayout>
 
 
