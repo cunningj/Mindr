@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
@@ -26,22 +28,20 @@ public class GeofenceTransitionService extends IntentService {
     private static final String TAG = GeofenceTransitionService.class.getSimpleName();
     public static final int GEOFENCE_NOTIFICATION_ID = 0;
 
+
     public GeofenceTransitionService() {
         super(TAG);
-        System.out.println("inside GeofenceTransitionService()");
     }
 
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        System.out.println("got into on handle intent");
 
         // Retrieve the Geofencing intent
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         // Handling errors
         if ( geofencingEvent.hasError() ) {
-            System.out.println("inside geofencingevent has error()");
 
             String errorMsg = getErrorString(geofencingEvent.getErrorCode() );
             Log.e( TAG, errorMsg );
@@ -54,8 +54,6 @@ public class GeofenceTransitionService extends IntentService {
         if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT ) {
 
-            System.out.println("inside geofenceTransition is enter or exit()");
-
             // Get the geofence that were triggered
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
             System.out.println("INSIDE ON HANDLE INTENT, TRIGGERING GEO: " + triggeringGeofences);
@@ -65,28 +63,46 @@ public class GeofenceTransitionService extends IntentService {
             sendNotification( geofenceTransitionDetails );
         }
     }
-
+    public String listIDName;
+    public List<String> arrayItems;
     // Create a detail message with Geofences received
     private String getGeofenceTransitionDetails(int geoFenceTransition, List<Geofence> triggeringGeofences) {
-        System.out.println("inside getGeofenceTransitionDetails()");
         // get the ID of each geofence triggered
         ArrayList<String> triggeringGeofencesList = new ArrayList<>();
-        System.out.println("triggeringGeofencesList inside get details, " + triggeringGeofencesList);
 
         for ( Geofence geofence : triggeringGeofences ) {
             triggeringGeofencesList.add( geofence.getRequestId() );
             System.out.println("INSIDE GEO TRANSITION DETAILS, TRIGGERING GEOFENCES ID: " + triggeringGeofencesList);
         }
 
+        listIDName = TextUtils.join(", ", triggeringGeofencesList);
+
+
+//        getInformation();
+
         String status = null;
         if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ) {
             System.out.println("GEOFENCE_TRANSITION_ENTER");
-            status = "You are approaching, check list: ";
+            status = "Approaching Mindr Location, check list(s): ";
         } else if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT )
-            status = "You are leaving, check list: ";
-        return status + TextUtils.join( ", ", triggeringGeofencesList);
+            status = "Leaving Mindr Location, check list(s): ";
+
+        return status;
 
     }
+
+//    public void getInformation(){
+//        System.out.println("We are in getInformation");
+//        try {
+//            AsyncTask task = new GetListItemsRequest().execute(listIDName);
+//            List<String> arrayItems = (List<String>) task.get();
+//            System.out.println("listItems" + arrayItems);
+//
+//        } catch (Exception e) {
+//            System.out.println(e.toString());
+//            e.printStackTrace();
+//        }
+//    }
 
     // Send a notification
     private void sendNotification( String msg ) {
@@ -126,7 +142,7 @@ public class GeofenceTransitionService extends IntentService {
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setColor(Color.RED)
                 .setContentTitle(msg)
-                .setContentText("Geofence Notification!")
+                .setContentText(listIDName)
                 .setContentIntent(notificationPendingIntent)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
                 .setAutoCancel(true);

@@ -165,8 +165,6 @@ public class MainActivity extends AppCompatActivity implements
 
     public void onResume() {
         super.onResume();
-
-
     }
 
 
@@ -215,6 +213,17 @@ public class MainActivity extends AppCompatActivity implements
             startGeofence(latitudeExtra, longitudeExtra);
         }
 
+
+        Bundle deleteExtras = getIntent().getExtras();
+        if (deleteExtras != null && deleteExtras.getString("DeletedListName") != null) {
+            deleteGeofences(deleteExtras.getString("DeletedListName"));
+            getIntent().removeExtra("DeletedListName");
+        }
+
+
+
+
+
     }
 
     // GoogleApiClient.ConnectionCallbacks suspended
@@ -231,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
     // Get last known location
-    private void getLastKnownLocation() {
+    public void getLastKnownLocation() {
         Log.d(TAG, "getLastKnownLocation()");
         if ( checkPermission() ) {
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
@@ -274,8 +283,14 @@ public class MainActivity extends AppCompatActivity implements
         writeActualLocation(location);
     }
 
+    double currentLatitude;
+    double currentLongitude;
+
     // Write location coordinates on UI
     private void writeActualLocation(Location location) {
+        currentLatitude = location.getLatitude();
+        currentLongitude = location.getLongitude();
+
         System.out.println( "Lat: " + location.getLatitude() );
         System.out.println( "Long: " + location.getLongitude() );
     }
@@ -346,16 +361,17 @@ public class MainActivity extends AppCompatActivity implements
 
         if(approachingExtra == 1) {
             System.out.println("APPROACHING EXTRA INSIDE IF: " + approachingExtra);
+            //400.0f meters is .25mi
             return new Geofence.Builder()
                     .setRequestId(GEOFENCE_REQ_ID)
-                    .setCircularRegion(latLng.latitude, latLng.longitude, 10000.0f)
+                    .setCircularRegion(latLng.latitude, latLng.longitude, 400.0f)
                     .setExpirationDuration(GEO_DURATION)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                     .build();
         } else {
             return new Geofence.Builder()
                     .setRequestId(GEOFENCE_REQ_ID)
-                    .setCircularRegion(latLng.latitude, latLng.longitude, 1000.0f)
+                    .setCircularRegion(latLng.latitude, latLng.longitude, 200.0f)
                     .setExpirationDuration(GEO_DURATION)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build();
@@ -446,7 +462,10 @@ public class MainActivity extends AppCompatActivity implements
 
 
     public void addLocationClick(View view) {
-        startActivity(new Intent(context, AddLocationActivity.class));
+        Intent sendCurrentCoordsToMap = new Intent(this, AddLocationActivity.class);
+        sendCurrentCoordsToMap.putExtra("currentLatitude", currentLatitude);
+        sendCurrentCoordsToMap.putExtra("currentLongitude", currentLongitude);
+        startActivity(sendCurrentCoordsToMap);
     }
 
     public void addListClick(View view) {

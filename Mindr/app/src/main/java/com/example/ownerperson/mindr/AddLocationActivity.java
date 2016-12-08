@@ -61,7 +61,19 @@ public class AddLocationActivity extends AppCompatActivity {
                 //System.out.println("onMapReady callback");
                 mMap = googleMap;
 
+
                 // Add current location marker here
+                Bundle extras = getIntent().getExtras();
+
+                final double lat = extras.getDouble("currentLatitude");
+                final double lng = extras.getDouble("currentLongitude");
+                LatLng newLocation = new LatLng(lat, lng);
+                mMap.addMarker(new MarkerOptions()
+                        .position(newLocation)
+                        .title("Here you are"));
+
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 15));
 
             }
 
