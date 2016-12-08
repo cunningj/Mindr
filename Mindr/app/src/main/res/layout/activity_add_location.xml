@@ -46,7 +46,7 @@
         android:textSize="20dp"
         android:onClick="confirmLocationClick"
         android:layout_alignParentBottom="true"
-        android:background="#00cc66"
+        android:background="@color/colorPrimaryDark"
         android:textColor="#fff"/>
 
 
