@@ -29,6 +29,7 @@
 
         </LinearLayout>
 
+
     <Button
         android:id="@+id/delete_list"
         android:layout_width="match_parent"
@@ -41,8 +42,38 @@
         android:layout_alignParentBottom="true"
         android:background="#FF6666"
         android:textColor="#fff"
+        android:layout_marginTop="23dp"
+
         android:layout_marginBottom="30dp"/>
 
+    ]
+
+    <EditText
+        android:id="@+id/list_item_on_views"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter item here"
+        android:layout_weight="4"
+        android:layout_alignBaseline="@+id/add_list_item_on_views"
+        android:layout_alignBottom="@+id/add_list_item_on_views"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/add_list_item_on_views"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:background="#00cc66"
+        android:text="Add Item"
+        android:onClick="addListItemOnViews"
+        android:layout_weight="2"
+        android:layout_above="@+id/delete_list"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="88dp"
+        android:layout_marginEnd="88dp"
+        android:layout_marginBottom="31dp" />
 
 
 </RelativeLayout>

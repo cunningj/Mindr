@@ -36,7 +36,6 @@ public class GetListItemsRequest extends AsyncTask<String,Void, List<String>> {
         reqData.put("listName", args[0]);
         JSONObject reqJson = new JSONObject(reqData);
         System.out.println("JSON!!!: "+ reqJson.toString());
-        System.out.println("beep");
         OkHttpClient client = new OkHttpClient();
         // Create request for remote resource.
         RequestBody body = RequestBody.create(JSON, reqJson.toString());

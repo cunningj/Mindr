@@ -31,20 +31,17 @@ public class GeofenceTransitionService extends IntentService {
 
     public GeofenceTransitionService() {
         super(TAG);
-        System.out.println("inside GeofenceTransitionService()");
     }
 
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        System.out.println("got into on handle intent");
 
         // Retrieve the Geofencing intent
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         // Handling errors
         if ( geofencingEvent.hasError() ) {
-            System.out.println("inside geofencingevent has error()");
 
             String errorMsg = getErrorString(geofencingEvent.getErrorCode() );
             Log.e( TAG, errorMsg );
@@ -56,8 +53,6 @@ public class GeofenceTransitionService extends IntentService {
         // Check if the transition type
         if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT ) {
-
-            System.out.println("inside geofenceTransition is enter or exit()");
 
             // Get the geofence that were triggered
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
@@ -72,28 +67,25 @@ public class GeofenceTransitionService extends IntentService {
     public List<String> arrayItems;
     // Create a detail message with Geofences received
     private String getGeofenceTransitionDetails(int geoFenceTransition, List<Geofence> triggeringGeofences) {
-        System.out.println("inside getGeofenceTransitionDetails()");
         // get the ID of each geofence triggered
         ArrayList<String> triggeringGeofencesList = new ArrayList<>();
-        System.out.println("triggeringGeofencesList inside get details, " + triggeringGeofencesList);
 
         for ( Geofence geofence : triggeringGeofences ) {
             triggeringGeofencesList.add( geofence.getRequestId() );
             System.out.println("INSIDE GEO TRANSITION DETAILS, TRIGGERING GEOFENCES ID: " + triggeringGeofencesList);
         }
 
-        listIDName = TextUtils.join("", triggeringGeofencesList);
+        listIDName = TextUtils.join(", ", triggeringGeofencesList);
 
 
 //        getInformation();
-        System.out.println("RIGHT AFTER GET INFORMATION");
 
         String status = null;
         if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ) {
             System.out.println("GEOFENCE_TRANSITION_ENTER");
-            status = "Approaching Mindr Location, check list: ";
+            status = "Approaching Mindr Location, check list(s): ";
         } else if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT )
-            status = "Leaving Mindr Location, check list: ";
+            status = "Leaving Mindr Location, check list(s): ";
 
         return status;
 
