@@ -71,7 +71,9 @@ public class AddLocationActivity extends AppCompatActivity {
                 mMap.addMarker(new MarkerOptions()
                         .position(newLocation)
                         .title("Here you are"));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(newLocation));
+
+
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 15));
 
             }
 
