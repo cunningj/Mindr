@@ -10,42 +10,61 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.ownerperson.mindr.ViewListItems">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/list_title"
-        android:textSize="25dp"
-        android:textColor="#000"
-        android:gravity="center_horizontal"
-        />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/list_item_names"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="40dp"
-            android:paddingRight="16dp"
-            android:orientation="vertical" >
-
-        </LinearLayout>
-    </ScrollView>
-
-    <Button
-        android:id="@+id/delete_list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="DELETE LIST"
-        android:textSize="20dp"
-        android:onClick="deleteListClick"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/list_title"
+            android:textSize="25dp"
+            android:textColor="#000"
+            android:gravity="center_horizontal"
+            />
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/list_item_names"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:paddingTop="40dp"
+                android:paddingRight="16dp"
+                android:orientation="vertical"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:background="#FF6666"
-        android:textColor="#fff"
-        android:layout_marginBottom="30dp"/>
+        android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/delete_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="DELETE LIST"
+            android:textSize="20dp"
+            android:onClick="deleteListClick"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:background="#FF6666"
+            android:textColor="#fff"
+            android:layout_marginBottom="30dp"/>
+    </LinearLayout>
 
 
 
