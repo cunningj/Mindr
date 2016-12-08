@@ -1,0 +1,13 @@
+Master List of Coordinates
+
+
+Gecko Designs:     geo fix -113.992592 46.874772
+
+Five on Black:     geo fix -113.9956151 46.872799
+
+Montgomery Distillery:       geo fix -113.9963228 46.8702307
+
+Intersection of Front and Orange:     geo fix -113.9990208 46.8721199
+
+Driving down Russell near Orange intersection:     geo fix -114.0181072 46.868608
+
