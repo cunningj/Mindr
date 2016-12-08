@@ -109,7 +109,6 @@ public class ViewListItems extends AppCompatActivity {
 
             AsyncTask task = new HttpDeleteRequest().execute(MainActivity.baseURL + "api/delete", name, "list");
             task.get();
-            //MainActivity.deleteGeofences(name);
 
         } catch (Exception e) {
             System.out.println(e.toString());

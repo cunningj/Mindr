@@ -40,6 +40,9 @@ public class GeofenceTransitionService extends IntentService {
         // Retrieve the Geofencing intent
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
+
+
+
         // Handling errors
         if ( geofencingEvent.hasError() ) {
 
@@ -64,45 +67,53 @@ public class GeofenceTransitionService extends IntentService {
         }
     }
     public String listIDName;
-    public List<String> arrayItems;
+    public String itemsString = "";
     // Create a detail message with Geofences received
     private String getGeofenceTransitionDetails(int geoFenceTransition, List<Geofence> triggeringGeofences) {
         // get the ID of each geofence triggered
         ArrayList<String> triggeringGeofencesList = new ArrayList<>();
 
-        for ( Geofence geofence : triggeringGeofences ) {
-            triggeringGeofencesList.add( geofence.getRequestId() );
+        for (Geofence geofence : triggeringGeofences) {
+            triggeringGeofencesList.add(geofence.getRequestId());
             System.out.println("INSIDE GEO TRANSITION DETAILS, TRIGGERING GEOFENCES ID: " + triggeringGeofencesList);
         }
 
         listIDName = TextUtils.join(", ", triggeringGeofencesList);
 
 
-//        getInformation();
+        try {
+            AsyncTask task = new GetListItemsRequest().execute(listIDName);
+            List<String> items = (List<String>) task.get();
+
+            for (String item : items) {
+                if (itemsString == "") {
+                    itemsString = item;
+                } else {
+                    itemsString = itemsString + ", " + item;
+                    System.out.println("item " + item);
+                }
+                System.out.println("item2 " + item);
+
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+
 
         String status = null;
         if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ) {
             System.out.println("GEOFENCE_TRANSITION_ENTER");
-            status = "Approaching Mindr Location, check list(s): ";
+            status = "Approaching Mindr Location, don't forget: ";
         } else if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT )
-            status = "Leaving Mindr Location, check list(s): ";
+            status = "Leaving Mindr Location, don't forget: " ;
 
         return status;
 
     }
 
-//    public void getInformation(){
-//        System.out.println("We are in getInformation");
-//        try {
-//            AsyncTask task = new GetListItemsRequest().execute(listIDName);
-//            List<String> arrayItems = (List<String>) task.get();
-//            System.out.println("listItems" + arrayItems);
-//
-//        } catch (Exception e) {
-//            System.out.println(e.toString());
-//            e.printStackTrace();
-//        }
-//    }
+
+
 
     // Send a notification
     private void sendNotification( String msg ) {
@@ -142,7 +153,7 @@ public class GeofenceTransitionService extends IntentService {
                 .setSmallIcon(R.drawable.ic_action_location)
                 .setColor(Color.RED)
                 .setContentTitle(msg)
-                .setContentText(listIDName)
+                .setContentText(itemsString)
                 .setContentIntent(notificationPendingIntent)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
                 .setAutoCancel(true);
