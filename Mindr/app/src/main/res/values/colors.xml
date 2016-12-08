@@ -4,5 +4,19 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="delete_red">#FF6666</color>
+    <color name="blue1">#2595b9</color>
+    <color name="blue2">#892E61</color>
+    <color name="purple">#bd0f91</color>
+    <color name="teal">#4bcaba</color>
+    <color name="green">#25a167</color>
+    <color name="bluepurple">#433075</color>
+    <color name="purple1">#9458b6</color>
+    <color name="purple2">#592c87</color>
+    <color name="purple3">#3a116b</color>
+    <color name="teal2">#28847a</color>
+    <color name="teal3">#4005c1</color>
+    <color name="transparent">#aaffffff</color>
+
+
 
 </resources>

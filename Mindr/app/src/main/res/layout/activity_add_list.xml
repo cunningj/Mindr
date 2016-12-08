@@ -22,12 +22,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="List Name"
-                android:textColorHint="#e9e9e9"
+                android:textColorHint="@color/transparent"
                 android:textSize="20dp"
                 android:textColor="#fff"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="20dp"
                 android:padding="15dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/purple2"
                 android:drawableLeft="@drawable/squiggly18"
                 android:drawablePadding="10dp"/>
 
@@ -36,7 +36,7 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:weightSum="6"
-                    android:layout_marginBottom="15dp">
+                    android:layout_marginBottom="20dp">
 
                     <TextView
                         android:id="@+id/location_description"
@@ -44,7 +44,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="15dp"
                         android:textColor="#545454"
-                        android:drawableLeft="@drawable/gps"
+                        android:drawableLeft="@drawable/compass"
                         android:paddingLeft="15dp" />
 
                     <Spinner
@@ -69,9 +69,9 @@
                 android:drawableStart="@drawable/touch18"
                 android:textOn="Alert When Arriving"
                 android:textOff="Alert When Leaving"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="10dp"
                 android:textStyle="bold"
-                android:background="@color/colorPrimary"
+                android:background="@color/purple1"
                 android:padding="15dp"
                 android:gravity="center" />
 
@@ -88,32 +88,36 @@
         android:layout_alignParentStart="true"
         android:weightSum="6"
         android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary">
+        android:background="@color/blue1">
 
         <EditText
             android:id="@+id/list_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter item here"
-            android:textColorHint="#fff"
+            android:textColorHint="@color/transparent"
             android:textColor="#fff"
-            android:textSize="18dp"
+            android:textSize="20dp"
+            android:padding="15dp"
             android:layout_weight="4"
-            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTint="@color/blue1"
             android:drawableLeft="@drawable/write18"
             android:drawablePadding="20dp"/>
 
         <Button
             android:id="@+id/add_list_text"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:textColor="#ffffff"
-            android:background="#00cc66"
+            android:background="@color/teal"
             android:text="ADD"
+            android:textSize="17dp"
+            android:textStyle="bold"
             android:layout_alignParentStart="true"
             android:layout_marginTop="0dp"
             android:layout_marginRight="10dp"
             android:onClick="addListItem"
+            android:paddingTop="3dp"
             android:layout_weight="2"/>
 
     </LinearLayout>
@@ -134,7 +138,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:background="#00cc66"
+        android:background="@color/colorPrimaryDark"
         android:textColor="#fff"
 />
 
