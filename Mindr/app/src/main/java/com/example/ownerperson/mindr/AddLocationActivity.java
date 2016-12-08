@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
@@ -120,16 +121,21 @@ public class AddLocationActivity extends AppCompatActivity {
 
         String locationNameText = locationName.getText().toString();
 
-        try {
-            AsyncTask task = new PostLocationRequest().execute(locationNameText, latString, lngString);
-            task.get();
 
-        } catch(Exception e){
-            System.out.println(e.toString());
-            e.printStackTrace();
+        if (!locationNameText.equals("")) {
+            try {
+                AsyncTask task = new PostLocationRequest().execute(locationNameText, latString, lngString);
+                task.get();
+
+            } catch (Exception e) {
+                System.out.println(e.toString());
+                e.printStackTrace();
+            }
+            startActivity(new Intent(context, MainActivity.class));
+        } else {
+            int duration = Toast.LENGTH_SHORT;
+            Toast.makeText(context, "Please enter a location name.", duration).show();
         }
-
-        startActivity(new Intent(context, MainActivity.class));
     }
 
 

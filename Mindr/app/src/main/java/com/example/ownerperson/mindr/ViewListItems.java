@@ -13,12 +13,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ViewListItems extends AppCompatActivity {
     Context context;
     LinearLayout buttons;
     String name;
+    List<String> location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,8 @@ public class ViewListItems extends AppCompatActivity {
 
         TextView title = (TextView) findViewById(R.id.list_title);
         title.setText(name + " List");
+//        TextView locationTitle = (TextView) findViewById(R.id.location_title);
+//        locationTitle.setText("at test");
 
 
         try {
@@ -40,7 +44,13 @@ public class ViewListItems extends AppCompatActivity {
             List<String> items = (List<String>) task.get();
             buttons = (LinearLayout) findViewById(R.id.list_item_names);
             int listID = 1;
+
+
+
+
             for(String item : items){
+
+
 
                 final LinearLayout itemLayout = new LinearLayout(this);
                 buttons.addView(itemLayout);

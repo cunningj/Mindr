@@ -4,6 +4,7 @@ var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
+  password : 'basset',
   multipleStatements: true
 });
 
@@ -34,6 +35,15 @@ app.get('/api/locations',(req, res) => {
 
   })
 })
+
+// app.get('/api/singleLocation',(req, res) => {
+//   connection.query('SELECT locationName FROM remindr.list_prefs WHERE listName =  IS NOT NULL', function(err, rows){
+//   if(err) throw err;
+//   res.json(rows.map(row => row.locationName))
+
+//   })
+// })
+
 
 // this route displays list items once a list is clicked on the main activity
 // it is a POST route because we have to send from frontend the info about what listName was clicked

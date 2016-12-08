@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -141,21 +142,27 @@ public class AddListActivity extends AppCompatActivity {
         List<String> params = new LinkedList<String>(Arrays.asList(baseParams));
         params.addAll(items);
 
-        try {
-            AsyncTask task = new PostListRequest().execute((String[])params.toArray(new String[params.size()]));
-            PostListRequest.LatLngResponse resp= (PostListRequest.LatLngResponse) task.get();
-            System.out.println("VICTORY lat : " + resp.latitude + " lng: " + resp.longitude + " approaching: " + resp.approaching);
 
-            Intent sendCoordsToGeofence = new Intent(this, MainActivity.class);
-            sendCoordsToGeofence.putExtra("Latitude", resp.latitude);
-            sendCoordsToGeofence.putExtra("Longitude", resp.longitude);
-            sendCoordsToGeofence.putExtra("Approaching", resp.approaching);
-            sendCoordsToGeofence.putExtra("ListName", listNameText);
-            startActivity(sendCoordsToGeofence);
+        if (!listNameText.equals("")) {
+            try {
+                AsyncTask task = new PostListRequest().execute((String[]) params.toArray(new String[params.size()]));
+                PostListRequest.LatLngResponse resp = (PostListRequest.LatLngResponse) task.get();
+                System.out.println("VICTORY lat : " + resp.latitude + " lng: " + resp.longitude + " approaching: " + resp.approaching);
 
-        } catch(Exception e){
-            System.out.println(e.toString());
-            e.printStackTrace();
+                Intent sendCoordsToGeofence = new Intent(this, MainActivity.class);
+                sendCoordsToGeofence.putExtra("Latitude", resp.latitude);
+                sendCoordsToGeofence.putExtra("Longitude", resp.longitude);
+                sendCoordsToGeofence.putExtra("Approaching", resp.approaching);
+                sendCoordsToGeofence.putExtra("ListName", listNameText);
+                startActivity(sendCoordsToGeofence);
+
+            } catch (Exception e) {
+                System.out.println(e.toString());
+                e.printStackTrace();
+            }
+        }  else {
+            int duration = Toast.LENGTH_SHORT;
+            Toast.makeText(context, "Please enter a list name.", duration).show();
         }
 
     }

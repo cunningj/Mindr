@@ -27,6 +27,16 @@
             android:textColor="#000"
             android:gravity="center_horizontal"
             />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:id="@+id/location_title"
+            android:textSize="25dp"
+            android:textColor="#000"
+            android:gravity="center_horizontal"
+            />
     </LinearLayout>
 
 
