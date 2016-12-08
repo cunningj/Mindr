@@ -10,71 +10,64 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.ownerperson.mindr.ViewListItems">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/list_title"
-        android:textSize="25dp"
-        android:textColor="#000"
-        android:gravity="center_horizontal"
-        />
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/list_item_names"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="40dp"
-            android:paddingRight="0dp"
-            android:orientation="vertical"
-            android:gravity="top|center_horizontal">
-
-        </LinearLayout>
-
-
-    <Button
-        android:id="@+id/delete_list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="DELETE LIST"
-        android:textSize="20dp"
-        android:onClick="deleteListClick"
+        android:orientation="vertical"
+        android:id="@+id/text_view_layout_id"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="15dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:id="@+id/list_title"
+            android:textSize="25dp"
+            android:textColor="#000"
+            android:gravity="center_horizontal"
+            />
+    </LinearLayout>
+
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@id/text_view_layout_id"
+            android:layout_above="@+id/delete_list">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/list_item_names"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:paddingTop="15dp"
+                android:paddingRight="16dp"
+                android:orientation="vertical"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                >
+            </LinearLayout>
+        </ScrollView>
+
+    <LinearLayout
+        android:id="@id/delete_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:background="#FF6666"
-        android:textColor="#fff"
-        android:layout_marginTop="23dp"
-
-        android:layout_marginBottom="30dp"/>
-
-    ]
-
-    <EditText
-        android:id="@+id/list_item_on_views"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:hint="Enter item here"
-        android:layout_weight="4"
-        android:layout_alignBaseline="@+id/add_list_item_on_views"
-        android:layout_alignBottom="@+id/add_list_item_on_views"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:id="@+id/add_list_item_on_views"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:background="#00cc66"
-        android:text="Add Item"
-        android:onClick="addListItemOnViews"
-        android:layout_weight="2"
-        android:layout_above="@+id/delete_list"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="88dp"
-        android:layout_marginEnd="88dp"
-        android:layout_marginBottom="31dp" />
-
+        android:layout_marginTop="10dp">
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="DELETE LIST"
+            android:textSize="20dp"
+            android:onClick="deleteListClick"
+            android:background="#FF6666"
+            android:textColor="#fff"
+            android:layout_marginBottom="10dp"/>
+    </LinearLayout>
 
 </RelativeLayout>
