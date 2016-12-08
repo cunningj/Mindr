@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -51,8 +52,7 @@ public class AddListActivity extends AppCompatActivity {
     String previousText;
     TextView newTextView;
     EditText listName;
-    Switch approaching;
-    Spinner alertRange;
+    ToggleButton approaching;
     Spinner locationName;
     Context context;
     EditText lastItem;
@@ -92,6 +92,7 @@ public class AddListActivity extends AppCompatActivity {
             resetValue++;
         }
         previousItem = (EditText) findViewById(R.id.list_item);
+//        previousItem.setTextColor();
         System.out.println("This is previous item " + previousItem);
         previousText = previousItem.getText().toString();
         System.out.println("This is previous text " + previousText);
@@ -113,7 +114,7 @@ public class AddListActivity extends AppCompatActivity {
         String approachingNum;
         listName = (EditText) findViewById(R.id.list_name);
         locationName = (Spinner) findViewById(R.id.location_spinner);
-        approaching = (Switch) findViewById(R.id.approaching);
+        approaching = (ToggleButton) findViewById(R.id.approaching);
         lastItem = (EditText) findViewById(R.id.list_item);
 
 

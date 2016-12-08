@@ -16,38 +16,65 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
             <EditText
                 android:id="@+id/list_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="List Name"
-                android:textSize="25dp"/>
+                android:textColorHint="#e9e9e9"
+                android:textSize="20dp"
+                android:textColor="#fff"
+                android:layout_marginBottom="15dp"
+                android:padding="15dp"
+                android:background="@color/colorPrimary"
+                android:drawableLeft="@drawable/squiggly18"
+                android:drawablePadding="10dp"/>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="6"
+                    android:layout_marginBottom="15dp">
 
-            <Switch
+                    <TextView
+                        android:id="@+id/location_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:textColor="#545454"
+                        android:drawableLeft="@drawable/gps"
+                        android:paddingLeft="15dp" />
+
+                    <Spinner
+                        android:id="@+id/location_spinner"
+                        android:layout_weight="4"
+                        android:layout_width="300dp"
+                        android:paddingLeft="10dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="5dp"
+                        android:gravity="left" />
+
+                </LinearLayout>
+
+            <ToggleButton
                 android:id="@+id/approaching"
                 android:checked="true"
-                android:switchMinWidth="15sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:switchPadding="20dp"
-                android:textSize="15dp"
-                android:text="Turn off to create an exit list"
-                />
+                android:textColor="#fff"
+                android:textSize="18dp"
+                android:drawableStart="@drawable/touch18"
+                android:textOn="Alert When Arriving"
+                android:textOff="Alert When Leaving"
+                android:layout_marginBottom="15dp"
+                android:textStyle="bold"
+                android:background="@color/colorPrimary"
+                android:padding="15dp"
+                android:gravity="center" />
 
-
-
-            <Spinner
-                android:id="@+id/location_spinner"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"/>
-
-            <TextView
-            android:id="@+id/new_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -59,30 +86,43 @@
         android:layout_below="@+id/add_list_layout"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp"
-        android:weightSum="6">
+        android:weightSum="6"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary">
 
         <EditText
             android:id="@+id/list_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter item here"
-            android:layout_weight="4"/>
+            android:textColorHint="#fff"
+            android:textColor="#fff"
+            android:textSize="18dp"
+            android:layout_weight="4"
+            android:backgroundTint="@color/colorPrimary"
+            android:drawableLeft="@drawable/write18"
+            android:drawablePadding="20dp"/>
 
         <Button
             android:id="@+id/add_list_text"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="30dp"
             android:textColor="#ffffff"
             android:background="#00cc66"
             android:text="ADD"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="10dp"
             android:onClick="addListItem"
             android:layout_weight="2"/>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/new_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp" />
 
     <Button
         android:id="@+id/submitListButton"
