@@ -165,8 +165,6 @@ public class MainActivity extends AppCompatActivity implements
 
     public void onResume() {
         super.onResume();
-
-
     }
 
 
@@ -363,16 +361,17 @@ public class MainActivity extends AppCompatActivity implements
 
         if(approachingExtra == 1) {
             System.out.println("APPROACHING EXTRA INSIDE IF: " + approachingExtra);
+            //400.0f meters is .25mi
             return new Geofence.Builder()
                     .setRequestId(GEOFENCE_REQ_ID)
-                    .setCircularRegion(latLng.latitude, latLng.longitude, 10000.0f)
+                    .setCircularRegion(latLng.latitude, latLng.longitude, 400.0f)
                     .setExpirationDuration(GEO_DURATION)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                     .build();
         } else {
             return new Geofence.Builder()
                     .setRequestId(GEOFENCE_REQ_ID)
-                    .setCircularRegion(latLng.latitude, latLng.longitude, 1000.0f)
+                    .setCircularRegion(latLng.latitude, latLng.longitude, 200.0f)
                     .setExpirationDuration(GEO_DURATION)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build();
